@@ -38,6 +38,7 @@ public class UserEndpoint {
     }
 
   ///new test
+    //test 2
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUserById(@PathVariable("id") int id) {
         //service
