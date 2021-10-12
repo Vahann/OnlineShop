@@ -20,6 +20,7 @@ public class UserDto {
     private String surname;
     private String email;
     private int age;
+    private boolean isActive;
     @Enumerated(EnumType.STRING)
     private Gender gender;
 }

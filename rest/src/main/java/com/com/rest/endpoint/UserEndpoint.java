@@ -45,8 +45,9 @@ public class UserEndpoint {
                     .notFound()
                     .build();
         }
-
-        userRepository.deleteById(id);
+        User user=userById.get();
+        user.setActive(false);
+//        userRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

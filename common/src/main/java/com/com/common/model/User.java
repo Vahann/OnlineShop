@@ -25,6 +25,7 @@ public class User {
     private String email;
     private String password;
     private String phoneNumber;
+    private boolean isActive;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
