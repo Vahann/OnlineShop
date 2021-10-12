@@ -37,9 +37,7 @@ public class UserEndpoint {
         return ResponseEntity.ok(userById.get());
     }
 
-    //testing git
-    //testing branch
-    //testing testing
+  ///new test
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUserById(@PathVariable("id") int id) {
         //service
