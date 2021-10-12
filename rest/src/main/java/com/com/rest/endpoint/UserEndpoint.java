@@ -1,5 +1,6 @@
 package com.com.rest.endpoint;
 
+
 import com.com.common.model.User;
 import com.com.common.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,7 @@ public class UserEndpoint {
         return ResponseEntity.ok(userById.get());
     }
 
+    //testing git
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUserById(@PathVariable("id") int id) {
         //service
