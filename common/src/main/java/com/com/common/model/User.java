@@ -1,5 +1,6 @@
 package com.com.common.model;
 
+
 import com.com.common.model.enums.Gender;
 import com.com.common.model.enums.Role;
 import lombok.*;
@@ -25,9 +26,10 @@ public class User {
     private String email;
     private String password;
     private String phoneNumber;
-    private boolean isActive;
+    private boolean activeProfile;
 
     @Enumerated(EnumType.STRING)
+    //////
     private Gender gender;
     private int age;
 }
