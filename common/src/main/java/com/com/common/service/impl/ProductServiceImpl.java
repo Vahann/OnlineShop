@@ -1,15 +1,14 @@
 package com.com.common.service.impl;
 
 import com.com.common.model.Product;
-import com.com.common.repository.OrderRepository;
+
 import com.com.common.repository.ProductRepository;
-import com.com.common.repository.UserRepository;
+
 import com.com.common.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-        private final ProductRepository productRepository;
-        private final UserRepository userRepository;
-        private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
 
 
     @Override
@@ -30,14 +27,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Optional<Product> findProductById(int id) {
 
-            return productRepository.findById(id);
+        return productRepository.findById(id);
     }
 
 //    @Override
 //    public void updateProduct(Product product) {
 //
 //    }
-
 
 
 //    @Override
@@ -62,19 +58,19 @@ public class ProductServiceImpl implements ProductService {
 //        book.setHashtags(hashtags);
 
 //        product.setProductAddDate(new Date());
-  //      productRepository.save(product);
-   // }
+    //      productRepository.save(product);
+    // }
 //}
 
     @Override
     public boolean nullifyProduct(int id) {    //deleteProduct
-       Optional<Product> productById = productRepository.findById(id);
-      if (productById.isPresent()) {
-          Product product = productById.get();
-          product.setCount(0);
-          productRepository.save(product);
-          return true;
-      }
-      return false;
+        Optional<Product> productById = productRepository.findById(id);
+        if (productById.isPresent()) {
+            Product product = productById.get();
+            product.setCount(0);
+            productRepository.save(product);
+            return true;
+        }
+        return false;
     }
 }

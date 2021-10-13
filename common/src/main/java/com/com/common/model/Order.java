@@ -1,7 +1,6 @@
 package com.com.common.model;
 
-import com.com.common.model.enums.Gender;
-import com.com.common.model.enums.Role;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

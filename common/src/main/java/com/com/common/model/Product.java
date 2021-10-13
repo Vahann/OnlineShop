@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+
 import java.util.List;
 
 @Data
@@ -32,8 +32,9 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @ManyToMany
-    private List<Order> order;
+////    @ManyToMany
+//    @OneToMany
+//    private List<Order> orderId;
 
     @Enumerated(EnumType.STRING)
     private Size size;

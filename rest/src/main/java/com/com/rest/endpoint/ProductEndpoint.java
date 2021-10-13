@@ -2,8 +2,7 @@ package com.com.rest.endpoint;
 
 
 import com.com.common.model.Product;
-import com.com.common.model.User;
-import com.com.common.repository.UserRepository;
+
 import com.com.common.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
