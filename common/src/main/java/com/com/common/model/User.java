@@ -6,6 +6,7 @@ import com.com.common.model.enums.Role;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -29,7 +30,11 @@ public class User {
     private boolean activeProfile;
 
     @Enumerated(EnumType.STRING)
-    //////
     private Gender gender;
     private int age;
+
+    @ManyToMany
+        private List<Sale> sale;
+
+
 }

@@ -22,10 +22,10 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    private User user;
-    @ManyToOne
-    private Product product;
+//    @ManyToOne
+//    private User user;
+//    @ManyToOne
+//    private Product product;
 
    private Date saleDate;
 }
