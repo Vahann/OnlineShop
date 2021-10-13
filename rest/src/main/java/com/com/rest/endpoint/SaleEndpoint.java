@@ -4,11 +4,13 @@ package com.com.rest.endpoint;
 import com.com.common.model.Sale;
 import com.com.common.model.User;
 import com.com.common.service.SaleService;
-
 import com.com.common.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +20,9 @@ import java.util.Optional;
 @RequestMapping("/sale")
 public class SaleEndpoint {
 
-    //
     private final SaleService saleService;
     private final UserService userService;
+
 
     @GetMapping("/")
     public List<Sale> getAllSales() {
@@ -35,20 +37,15 @@ public class SaleEndpoint {
         }
         return ResponseEntity.ok(userByEmail.get());
     }
-//        @GetMapping("/{userEmail}")
-//                public ResponseEntity<Sale> get
-////
-//    @GetMapping("/{id}")
-//    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
-//        //service
-//        Optional<User> userById = userRepository.findById(id);
-//        if (userById.isEmpty()) {
-//            return ResponseEntity
-//                    .notFound()
-//                    .build();
-//        }
-//
-//        return ResponseEntity.ok(userById.get());
+    @GetMapping("/product/{id}")
+//    public ResponseEntity<Product> getSaleByProductId(@PathVariable("id") int id){
+    public ResponseEntity<Sale> searchSale(@PathVariable("id")int id){
+        Optional<Sale> saleByProductId=saleService.findSaleByProductId(id);
+        if (saleByProductId.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(saleByProductId.get());
+    }
 //    }
 //
 //  ///new test

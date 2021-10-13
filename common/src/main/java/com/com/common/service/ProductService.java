@@ -18,5 +18,7 @@ public interface ProductService {
 
     boolean nullifyProduct(int id);
 
+//    Optional<Product> findSaleByProductId(int id);
+
 
 }

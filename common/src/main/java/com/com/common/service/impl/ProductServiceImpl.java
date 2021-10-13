@@ -2,6 +2,7 @@ package com.com.common.service.impl;
 
 import com.com.common.model.Product;
 
+import com.com.common.model.Sale;
 import com.com.common.repository.ProductRepository;
 
 import com.com.common.service.ProductService;
@@ -73,4 +74,11 @@ public class ProductServiceImpl implements ProductService {
         }
         return false;
     }
+
+//    @Override
+//    public Optional<Product> findSaleByProductId(int id) {
+//
+//
+//        return Optional.empty();
+//    }
 }

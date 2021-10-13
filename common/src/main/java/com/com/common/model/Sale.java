@@ -24,8 +24,8 @@ public class Sale {
 
 //    @ManyToOne
 //    private User user;
-//    @ManyToOne
-//    private Product product;
+    @ManyToOne
+    private Product product;
 
    private Date saleDate;
 }

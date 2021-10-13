@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +19,16 @@ public class SaleServiceImpl implements SaleService {
     public List<Sale> findAllSales() {
         return saleRepository.findAll();
     }
+
+    @Override
+    public Optional<Sale> findSaleByProductId(int id) {
+        return saleRepository.findSaleByProductId(id);
+    }
+
+//    @Override
+//    public Optional<Sale> findSaleByProductId(int id) {
+//        Optional<Sale> saleOptional=
+//    }
 
 
 //    @Override
