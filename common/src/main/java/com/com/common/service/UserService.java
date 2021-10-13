@@ -11,4 +11,6 @@ public interface UserService {
     Optional<User> findUserById(int id);
 
     boolean changeStatusUser(int id);
+
+    Optional<User> findUserByEmail(String email);
 }

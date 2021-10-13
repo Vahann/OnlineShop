@@ -34,11 +34,16 @@ public class UserServiceImpl implements UserService {
         Optional<User> userById=userRepository.findById(id);
         if (userById.isPresent()){
             User user=userById.get();
-            user.setActiveProfile(false);
+            user.setActiveProfile(!user.isActiveProfile());
             userRepository.save(user);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
 }

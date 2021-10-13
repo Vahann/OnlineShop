@@ -39,7 +39,7 @@ public class UserEndpoint {
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUserById(@PathVariable("id") int id) {
         if (userService.changeStatusUser(id)) {
-            ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }

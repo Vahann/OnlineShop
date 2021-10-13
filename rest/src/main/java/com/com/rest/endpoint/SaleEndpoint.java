@@ -2,16 +2,16 @@ package com.com.rest.endpoint;
 
 
 import com.com.common.model.Sale;
+import com.com.common.model.User;
 import com.com.common.service.SaleService;
 
+import com.com.common.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.criterion.Order;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,11 +20,21 @@ public class SaleEndpoint {
 
     //
     private final SaleService saleService;
+    private final UserService userService;
 
     @GetMapping("/")
     public List<Sale> getAllSales() {
         return saleService.findAllSales();
-//    }
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<User> getSaleByUserEmail(@PathVariable("email") String email){
+        Optional<User> userByEmail=userService.findUserByEmail(email);
+        if (userByEmail.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userByEmail.get());
+    }
 //        @GetMapping("/{userEmail}")
 //                public ResponseEntity<Sale> get
 ////
@@ -59,5 +69,5 @@ public class SaleEndpoint {
 ////        userRepository.deleteById(id);
 //        return ResponseEntity.noContent().build();
 //    }
-    }
+//    }
 }
