@@ -1,4 +1,14 @@
 package com.com.common.service;
 
-public enum UserService {
+import com.com.common.model.User;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface UserService {
+    List<User> findAllUsers();
+
+    Optional<User> findUserById(int id);
+
+    boolean changeStatusUser(int id);
 }

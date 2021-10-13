@@ -8,15 +8,15 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "order")
-public class Order {
+@Table(name = "sale")
+public class Sale {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +24,8 @@ public class Order {
 
     @ManyToOne
     private User user;
-    @ManyToMany
-    private List<Product> products;
+    @ManyToOne
+    private Product product;
 
-   private Date date;
+   private Date saleDate;
 }

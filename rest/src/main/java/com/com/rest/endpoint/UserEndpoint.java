@@ -2,7 +2,7 @@ package com.com.rest.endpoint;
 
 
 import com.com.common.model.User;
-import com.com.common.repository.UserRepository;
+import com.com.common.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,19 +15,18 @@ import java.util.Optional;
 @RequestMapping("/users")
 public class UserEndpoint {
 
-    //
-    private final UserRepository userRepository;
+
+    private final UserService userService;
 
     @GetMapping("/")
     public List<User> getAllUser() {
-        //service
-        return userRepository.findAll();
+        return userService.findAllUsers();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
-        //service
-        Optional<User> userById = userRepository.findById(id);
+
+        Optional<User> userById = userService.findUserById(id);
         if (userById.isEmpty()) {
             return ResponseEntity
                     .notFound()
@@ -37,22 +36,12 @@ public class UserEndpoint {
         return ResponseEntity.ok(userById.get());
     }
 
-  ///new test
-    //test 2
-    //test 2
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUserById(@PathVariable("id") int id) {
-        //service
-       Optional<User> userById=userRepository.findById(id);
-        if (userById.isEmpty()) {
-            return ResponseEntity
-                    .notFound()
-                    .build();
+        if (userService.changeStatusUser(id)) {
+            ResponseEntity.noContent().build();
         }
-        User user=userById.get();
-        user.setActiveProfile(false);
-        userRepository.save(user);
-//        userRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.notFound().build();
     }
+
 }
