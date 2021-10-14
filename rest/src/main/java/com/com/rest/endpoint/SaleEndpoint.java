@@ -3,6 +3,7 @@ package com.com.rest.endpoint;
 
 import com.com.common.model.Sale;
 import com.com.common.model.User;
+import com.com.common.repository.SaleRepository;
 import com.com.common.service.SaleService;
 import com.com.common.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class SaleEndpoint {
 
     private final SaleService saleService;
+    private final SaleRepository saleRepository;
     private final UserService userService;
 
 
@@ -29,22 +31,30 @@ public class SaleEndpoint {
         return saleService.findAllSales();
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<User> getSaleByUserEmail(@PathVariable("email") String email){
-        Optional<User> userByEmail=userService.findUserByEmail(email);
-        if (userByEmail.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(userByEmail.get());
-    }
+//    @GetMapping("/{email}")
+//    public ResponseEntity<User> getSaleByUserEmail(@PathVariable("email") String email){
+//        Optional<User> userByEmail=userService.findUserByEmail(email);
+//        if (userByEmail.isEmpty()){
+//            return ResponseEntity.notFound().build();
+//        }
+//        return ResponseEntity.ok(userByEmail.get());
+//    }
     @GetMapping("/product/{id}")
-//    public ResponseEntity<Product> getSaleByProductId(@PathVariable("id") int id){
     public ResponseEntity<Sale> searchSale(@PathVariable("id")int id){
         Optional<Sale> saleByProductId=saleService.findSaleByProductId(id);
         if (saleByProductId.isEmpty()){
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(saleByProductId.get());
+    }
+    @GetMapping("/{email}")
+    public ResponseEntity<List<Sale>> getSaleByUserEmail(@PathVariable("email") String email){
+//        Optional<User> userByEmail=userService.findUserByEmail(email);
+        Optional<List<Sale>> saleByEmail= saleRepository.findSaleByUserEmail(email);
+        if (saleByEmail.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(saleByEmail.get());
     }
 //    }
 //

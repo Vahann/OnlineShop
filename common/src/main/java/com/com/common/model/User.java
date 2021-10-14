@@ -33,8 +33,8 @@ public class User {
     private Gender gender;
     private int age;
 
-    @ManyToMany
-        private List<Sale> sale;
+//    @ManyToMany
+//        private List<Sale> sale;
 
 
 }
