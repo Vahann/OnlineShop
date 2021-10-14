@@ -43,17 +43,14 @@ public class ProductEndpoint {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
-
-//       Optional<User> userById=userRepository.findById(id);
-//        if (userById.isEmpty()) {
-//            return ResponseEntity
-//                    .notFound()
-//                    .build();
-//        }
-//        User user=userById.get();
-//        user.setActiveProfile(false);
-//        userRepository.save(user);
-////        userRepository.deleteById(id);
-//        return ResponseEntity.noContent().build();
     }
+
+    @PostMapping
+    public void addProduct(@RequestBody Product product){
+
+        productService.addProduct(product);
+    }
+
+
+
 }
