@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.persistence.criteria.Order;
 
 
 
@@ -33,8 +34,6 @@ public class Product {
     private Size size;
 
    // private Date productAddDate; // update SQL
-
-
 
     private String picUrl;
 }

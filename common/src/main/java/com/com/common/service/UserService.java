@@ -13,4 +13,6 @@ public interface UserService {
     boolean changeStatusUser(int id);
 
     Optional<User> findUserByEmail(String email);
+
+    void addUser(User user);
 }

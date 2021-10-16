@@ -1,14 +1,12 @@
 package com.com.common.service.impl;
 
-import com.com.common.model.Product;
 import com.com.common.model.User;
-import com.com.common.repository.ProductRepository;
 import com.com.common.repository.UserRepository;
-import com.com.common.service.ProductService;
 import com.com.common.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,4 +45,16 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email);
     }
 
+    @Override
+    public void addUser(User user) {
+        try {
+            if (findUserByEmail(user.getEmail()).isEmpty()){
+                userRepository.save(user);
+            }
+        }catch (Exception e){
+            System.out.println("user with this email is already registered");
+        }
+
+        // return userRepository.save(user);
+    }
 }

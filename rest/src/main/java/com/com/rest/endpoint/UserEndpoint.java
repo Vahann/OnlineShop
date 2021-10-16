@@ -4,6 +4,7 @@ package com.com.rest.endpoint;
 import com.com.common.model.User;
 import com.com.common.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,5 +44,17 @@ public class UserEndpoint {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @PostMapping
+    public ResponseEntity addUser(@RequestBody User user){
+
+        if (userService.findUserByEmail(user.getEmail()).isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        userService.addUser(user);
+    return ResponseEntity.ok(user.getId());
+    }
+
+
 
 }

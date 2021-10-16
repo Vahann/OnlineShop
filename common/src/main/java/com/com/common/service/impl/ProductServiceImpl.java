@@ -8,6 +8,7 @@ import com.com.common.repository.ProductRepository;
 import com.com.common.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.List;
@@ -29,6 +30,12 @@ public class ProductServiceImpl implements ProductService {
     public Optional<Product> findProductById(int id) {
 
         return productRepository.findById(id);
+    }
+
+    @Override
+    public void addProduct(Product product, MultipartFile multipartFile) {  //MultipartFile multipartFile
+
+        productRepository.save(product);
     }
 
 //    @Override
