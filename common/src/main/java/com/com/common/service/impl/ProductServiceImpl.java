@@ -33,7 +33,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addProduct(Product product) {  //MultipartFile multipartFile
+    public void addProduct(Product product, MultipartFile multipartFile) {  //MultipartFile multipartFile
 
         productRepository.save(product);
     }

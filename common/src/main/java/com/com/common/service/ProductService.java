@@ -14,7 +14,7 @@ public interface ProductService {
 
     //    void updateProduct(Product product);
 //
-    void addProduct(Product product);    // MultipartFile multipartFile
+    void addProduct(Product product, MultipartFile multipartFile);    // MultipartFile multipartFile
 
     boolean nullifyProduct(int id);
 

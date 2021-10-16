@@ -35,7 +35,5 @@ public class Product {
 
    // private Date productAddDate; // update SQL
 
-
-
     private String picUrl;
 }
