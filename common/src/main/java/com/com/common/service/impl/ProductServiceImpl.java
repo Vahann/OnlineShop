@@ -1,15 +1,10 @@
 package com.com.common.service.impl;
 
 import com.com.common.model.Product;
-
-import com.com.common.model.Sale;
 import com.com.common.repository.ProductRepository;
-
 import com.com.common.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addProduct(Product product, MultipartFile multipartFile) {  //MultipartFile multipartFile
+    public void addProduct(Product product) {  //MultipartFile multipartFile
 
         productRepository.save(product);
     }
