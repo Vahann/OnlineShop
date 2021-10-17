@@ -12,9 +12,7 @@ public interface ProductService {
 
     Optional<Product> findProductById(int id);
 
-    //    void updateProduct(Product product);
-//
-    void addProduct(Product product, MultipartFile multipartFile);    // MultipartFile multipartFile
+    void addProduct(Product product);    // MultipartFile multipartFile
 
     boolean nullifyProduct(int id);
 

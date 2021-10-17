@@ -2,11 +2,9 @@ package com.com.rest.endpoint;
 
 
 import com.com.common.model.Product;
-import com.com.common.repository.ProductRepository;
 import com.com.common.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +22,7 @@ public class ProductEndpoint {
 
     //
     private final ProductService productService;
-    private final ProductRepository productRepository;
+//    private final ProductRepository productRepository;
 
     @Value("${upload.dir}")
     private String uploadDir;
@@ -47,8 +45,8 @@ public class ProductEndpoint {
         multipartFile.transferTo(new File(uploadDir + File.separator + pic));
         Product product = byId.get();
         product.setPicUrl(pic);
-        productRepository.save(product);
-
+//        productRepository.save(product);
+        productService.addProduct(product);
 
         return ResponseEntity.ok().build();
     }
@@ -74,10 +72,10 @@ public class ProductEndpoint {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
-    public void addProduct(@RequestBody Product product, MultipartFile multipartFile) {
+    @PostMapping("/add")
+    public void addProducts(@RequestBody Product product) { //multipartFile
 
-        productService.addProduct(product, multipartFile);
+        productService.addProduct(product);
     }
 
 

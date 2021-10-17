@@ -6,7 +6,6 @@ import com.com.common.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,15 +45,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addUser(User user) {
-        try {
-            if (findUserByEmail(user.getEmail()).isEmpty()){
-                userRepository.save(user);
-            }
-        }catch (Exception e){
-            System.out.println("user with this email is already registered");
-        }
+    public Optional<User> addUser(User user) {
+//        userRepository.save(user);
+//        Optional<User> userOptional= userRepository.findById(user.getId());
+//        try {
+//            if (findUserByEmail(user.getEmail()).isEmpty()){
+//                userRepository.save(user);
+//            }
+//        }catch (Exception e){
+//            System.out.println("user with this email is already registered");
+//        }
 
-        // return userRepository.save(user);
+//         return userRepository.save(user);
+        userRepository.save(user);
+        return userRepository.findById(user.getId());
     }
 }

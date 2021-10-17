@@ -1,13 +1,17 @@
 package com.com.rest.endpoint;
 
 
+import com.com.common.dto.UserDto;
+import com.com.common.dto.UserSaveDto;
 import com.com.common.model.User;
 import com.com.common.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,14 +22,22 @@ public class UserEndpoint {
 
 
     private final UserService userService;
+    private final ModelMapper mapper;
 
     @GetMapping("/")
-    public List<User> getAllUser() {
-        return userService.findAllUsers();
+    public List<UserDto> getAllUser() {
+        List<User> allUser=userService.findAllUsers();
+      List<UserDto> userDtos=new ArrayList<>();
+        for (User user:allUser) {
+            UserDto userDto=mapper.map(user,UserDto.class);
+            userDtos.add(userDto);
+        }
+        return userDtos;
+//        return userService.findAllUsers();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") int id) {
 
         Optional<User> userById = userService.findUserById(id);
         if (userById.isEmpty()) {
@@ -34,25 +46,27 @@ public class UserEndpoint {
                     .build();
         }
 
-        return ResponseEntity.ok(userById.get());
+        return ResponseEntity.ok(mapper.map(userById.get(),UserDto.class));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUserById(@PathVariable("id") int id) {
+    public ResponseEntity<UserSaveDto> deleteUserById(@PathVariable("id") int id) {
         if (userService.changeStatusUser(id)) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
-    public ResponseEntity addUser(@RequestBody User user){
+    @PostMapping("/add")
+    public ResponseEntity<UserDto> addUser(@RequestBody UserSaveDto userSaveDto){
 
-        if (userService.findUserByEmail(user.getEmail()).isPresent()){
+//        if (userService.findUserByEmail(userSaveDto.getEmail()).isEmpty()){
+        if (userService.findUserByEmail(userSaveDto.getEmail()).isPresent()){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
+//            return ResponseEntity.notFound().build();
         }
-        userService.addUser(user);
-    return ResponseEntity.ok(user.getId());
+        userService.addUser(mapper.map(userSaveDto,User.class));
+    return ResponseEntity.ok(mapper.map(userSaveDto,UserDto.class));
     }
 
 
