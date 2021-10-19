@@ -2,7 +2,7 @@ package com.com.rest.endpoint;
 
 
 import com.com.common.model.Sale;
-import com.com.common.model.User;
+import com.com.common.repository.SaleRepository;
 import com.com.common.service.SaleService;
 import com.com.common.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,8 @@ import java.util.Optional;
 public class SaleEndpoint {
 
     private final SaleService saleService;
-    private final UserService userService;
+//    private final SaleRepository saleRepository;
+//    private final UserService userService;
 
 
     @GetMapping("/")
@@ -29,42 +30,31 @@ public class SaleEndpoint {
         return saleService.findAllSales();
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<User> getSaleByUserEmail(@PathVariable("email") String email){
-        Optional<User> userByEmail=userService.findUserByEmail(email);
-        if (userByEmail.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(userByEmail.get());
-    }
+    //    @GetMapping("/{email}")
+//    public ResponseEntity<User> getSaleByUserEmail(@PathVariable("email") String email){
+//        Optional<User> userByEmail=userService.findUserByEmail(email);
+//        if (userByEmail.isEmpty()){
+//            return ResponseEntity.notFound().build();
+//        }
+//        return ResponseEntity.ok(userByEmail.get());
+//    }
     @GetMapping("/product/{id}")
-//    public ResponseEntity<Product> getSaleByProductId(@PathVariable("id") int id){
-    public ResponseEntity<Sale> searchSale(@PathVariable("id")int id){
-        Optional<Sale> saleByProductId=saleService.findSaleByProductId(id);
-        if (saleByProductId.isEmpty()){
+    public ResponseEntity<List<Sale>> searchSaleByProductId(@PathVariable("id") int id) {
+        Optional<List<Sale>> saleByProductId = saleService.findSaleByProductId(id);
+        if (saleByProductId.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(saleByProductId.get());
     }
-//    }
-//
-//  ///new test
-//    //test 2
-//    //test 2
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<User> deleteUserById(@PathVariable("id") int id) {
-//        //service
-//       Optional<User> userById=userRepository.findById(id);
-//        if (userById.isEmpty()) {
-//            return ResponseEntity
-//                    .notFound()
-//                    .build();
-//        }
-//        User user=userById.get();
-//        user.setActiveProfile(false);
-//        userRepository.save(user);
-////        userRepository.deleteById(id);
-//        return ResponseEntity.noContent().build();
-//    }
-//    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<List<Sale>> searchSaleByUserEmail(@PathVariable("email") String email) {
+        Optional<List<Sale>> saleByUserEmail=saleService.findSalesByUserEmail(email);
+//        Optional<List<Sale>> saleByEmail = saleRepository.findSaleByUserEmail(email);
+        if (saleByUserEmail.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(saleByUserEmail.get());
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.com.common.model;
 
-import com.com.common.model.enums.*;
+import com.com.common.model.enums.ProductForGender;
+import com.com.common.model.enums.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -30,16 +30,9 @@ public class Product {
     private ProductForGender productForGender;
 
     @Enumerated(EnumType.STRING)
-    private Category category;
-
-////    @ManyToMany
-//    @OneToMany
-//    private List<Order> orderId;
-
-    @Enumerated(EnumType.STRING)
     private Size size;
 
-   // private Date productAddDate; // update SQL
+    // private Date productAddDate; // update SQL
 
     private String picUrl;
 }
