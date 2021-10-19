@@ -26,10 +26,10 @@ public class UserEndpoint {
 
     @GetMapping("/")
     public List<UserDto> getAllUser() {
-        List<User> allUser=userService.findAllUsers();
-      List<UserDto> userDtos=new ArrayList<>();
-        for (User user:allUser) {
-            UserDto userDto=mapper.map(user,UserDto.class);
+        List<User> allUser = userService.findAllUsers();
+        List<UserDto> userDtos = new ArrayList<>();
+        for (User user : allUser) {
+            UserDto userDto = mapper.map(user, UserDto.class);
             userDtos.add(userDto);
         }
         return userDtos;
@@ -46,7 +46,7 @@ public class UserEndpoint {
                     .build();
         }
 
-        return ResponseEntity.ok(mapper.map(userById.get(),UserDto.class));
+        return ResponseEntity.ok(mapper.map(userById.get(), UserDto.class));
     }
 
     @DeleteMapping("/{id}")
@@ -58,17 +58,27 @@ public class UserEndpoint {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<UserDto> addUser(@RequestBody UserSaveDto userSaveDto){
+    public ResponseEntity<UserDto> addUser(@RequestBody UserSaveDto userSaveDto) {
 
-//        if (userService.findUserByEmail(userSaveDto.getEmail()).isEmpty()){
-        if (userService.findUserByEmail(userSaveDto.getEmail()).isPresent()){
+        if (userService.findUserByEmail(userSaveDto.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
 //            return ResponseEntity.notFound().build();
+        } else {
+            userService.addUser(mapper.map(userSaveDto, User.class));
         }
-        userService.addUser(mapper.map(userSaveDto,User.class));
-    return ResponseEntity.ok(mapper.map(userSaveDto,UserDto.class));
+        return ResponseEntity.ok(mapper.map(userSaveDto, UserDto.class));
     }
 
+    @PutMapping("/update/{id}")
+    // except password
+    public ResponseEntity<UserDto> updateUserById(@PathVariable("id") int id,
+                                                 @RequestBody UserSaveDto userSaveDto){
 
+    if ((userService.updateUser(id,userSaveDto)).isEmpty()){
+        return ResponseEntity.notFound().build();
+    }
+
+      return ResponseEntity.ok(mapper.map(userSaveDto, UserDto.class));
+    }
 
 }

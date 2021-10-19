@@ -1,5 +1,6 @@
 package com.com.common.service;
 
+import com.com.common.dto.UserSaveDto;
 import com.com.common.model.User;
 
 import java.util.List;
@@ -15,6 +16,8 @@ public interface UserService {
 
     Optional<User> findUserByEmail(String email);
 
-//  ???  void addUser(User user);
-    Optional<User> addUser(User user);
+    void addUser(User user);
+//    Optional<User> addUser(User user);
+
+    Optional<User> updateUser(int id, UserSaveDto userSaveDto);
 }

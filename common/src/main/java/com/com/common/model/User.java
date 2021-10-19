@@ -3,7 +3,10 @@ package com.com.common.model;
 
 import com.com.common.model.enums.Gender;
 import com.com.common.model.enums.Role;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -34,7 +37,7 @@ public class User {
     private int age;
 
 //    @ManyToMany
-//        private List<Sale> sale;
+//    private List<Sale> sale; //kommentic hankarc chhanes!!!
 
 
 }

@@ -22,6 +22,7 @@ public class UserSaveDto {
     private String email;
     private String password;
     private String phoneNumber;
+    private int age;
     private boolean isActive;
 
     @Enumerated(EnumType.STRING)

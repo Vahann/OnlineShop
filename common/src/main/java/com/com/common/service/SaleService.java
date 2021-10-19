@@ -9,5 +9,7 @@ public interface SaleService {
 
     List<Sale> findAllSales();
 
-    Optional<Sale> findSaleByProductId(int id);
+    Optional<List<Sale>> findSaleByProductId(int id);
+
+    Optional<List<Sale>> findSalesByUserEmail(String email);
 }

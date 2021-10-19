@@ -1,14 +1,13 @@
 package com.com.common.model;
 
-import com.com.common.model.enums.*;
+import com.com.common.model.enums.ProductForGender;
+import com.com.common.model.enums.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.persistence.criteria.Order;
-
 
 
 @Data
@@ -33,7 +32,7 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Size size;
 
-   // private Date productAddDate; // update SQL
+    // private Date productAddDate; // update SQL
 
     private String picUrl;
 }

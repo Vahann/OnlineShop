@@ -39,31 +39,6 @@ public class ProductServiceImpl implements ProductService {
 //    }
 
 
-//    @Override
-//    public void addProduct(Product product, MultipartFile multipartFile) {
-
-//        if (!multipartFile.isEmpty()) {
-//            String picUrl = System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
-//            try {
-//                multipartFile.transferTo(new File(uploadDir + File.separator + picUrl));
-//            } catch (IOException e) {
-//                log.error("Exception while uploading file {} ", picUrl);
-//
-//            }
-//            product.setPicUrl(picUrl);
-//        }
-
-//        List<Hashtag> hashtags = new ArrayList<>();
-//        for (String s : hashtagList) {
-//            var byName = hashtagService.findByName(s);
-//            hashtags.add(byName);
-//        }
-//        book.setHashtags(hashtags);
-
-//        product.setProductAddDate(new Date());
-    //      productRepository.save(product);
-    // }
-//}
 
     @Override
     public boolean nullifyProduct(int id) {    //deleteProduct

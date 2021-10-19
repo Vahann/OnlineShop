@@ -21,51 +21,12 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public Optional<Sale> findSaleByProductId(int id) {
+    public Optional<List<Sale>> findSaleByProductId(int id) {
         return saleRepository.findSaleByProductId(id);
     }
 
-//    @Override
-//    public Optional<Sale> findSaleByProductId(int id) {
-//        Optional<Sale> saleOptional=
-//    }
-
-
-//    @Override
-//    public void addProduct(Product product, MultipartFile multipartFile) {
-
-//        if (!multipartFile.isEmpty()) {
-//            String picUrl = System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
-//            try {
-//                multipartFile.transferTo(new File(uploadDir + File.separator + picUrl));
-//            } catch (IOException e) {
-//                log.error("Exception while uploading file {} ", picUrl);
-//
-//            }
-//            product.setPicUrl(picUrl);
-//        }
-
-//        List<Hashtag> hashtags = new ArrayList<>();
-//        for (String s : hashtagList) {
-//            var byName = hashtagService.findByName(s);
-//            hashtags.add(byName);
-//        }
-//        book.setHashtags(hashtags);
-
-//        product.setProductAddDate(new Date());
-    //      productRepository.save(product);
-    // }
-//}
-//
-//    @Override
-//    public boolean nullifyProduct(int id) {    //deleteProduct
-//        Optional<Product> productById = productRepository.findById(id);
-//        if (productById.isPresent()) {
-//            Product product = productById.get();
-//            product.setCount(0);
-//            productRepository.save(product);
-//            return true;
-//        }
-//        return false;
-//    }
+    @Override
+    public Optional<List<Sale>> findSalesByUserEmail(String email) {
+        return saleRepository.findSaleByUserEmail(email);
+    }
 }
