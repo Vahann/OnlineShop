@@ -5,13 +5,18 @@ import com.com.common.model.Product;
 import com.com.common.service.ProductService;
 import lombok.RequiredArgsConstructor;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +36,16 @@ public class ProductEndpoint {
     public List<Product> getAllProducts() {
         return productService.findAllProducts();
     }
+
+
+    @GetMapping("/openImage")
+    public void openImage(@RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException {
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        InputStream in = new FileInputStream(uploadDir + File.separator + fileName);
+        IOUtils.copy(in, response.getOutputStream());
+
+    }
+
 
     @PostMapping("/addImage/{productId}")
     public ResponseEntity addImage(@PathVariable("productId") int productId, @RequestParam(value = "image") MultipartFile multipartFile) throws IOException {
