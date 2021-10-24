@@ -52,11 +52,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> updateUser(int id, UserSaveDto userSaveDto) {
-        Optional<User> userBiId = userRepository.findById(id);
-        if (userBiId.isEmpty()) {
+        Optional<User> userById = userRepository.findById(id);
+        if (userById.isEmpty()) {
             return Optional.empty();
         }
-        User userUpdate = userBiId.get();
+        User userUpdate = userById.get();
         userUpdate.setName(userSaveDto.getName());
         userUpdate.setSurname(userSaveDto.getSurname());
         userUpdate.setEmail(userSaveDto.getEmail());

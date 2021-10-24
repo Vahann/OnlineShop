@@ -78,5 +78,12 @@ public class ProductEndpoint {
         productService.addProduct(product);
     }
 
-
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Product> updateProductById(@PathVariable("id") int id,
+                                                     @RequestBody Product product) {
+        if ((productService.updateProduct(id, product)).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(product);
+    }
 }

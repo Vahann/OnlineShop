@@ -52,6 +52,28 @@ public class ProductServiceImpl implements ProductService {
         return false;
     }
 
+    @Override
+    public Optional<Product> updateProduct(int id, Product product) {
+        Optional<Product> productById= productRepository.findById(id);
+        if (productById.isEmpty()){
+            return Optional.empty();
+        }else {
+        Product productUpdate=productById.get();
+        productUpdate.setProductName(product.getProductName());
+        productUpdate.setDescription(product.getDescription());
+        productUpdate.setPrice(product.getPrice());
+        productUpdate.setCount(product.getCount());
+        productUpdate.setProductForGender(product.getProductForGender());
+        productUpdate.setSize(product.getSize());
+        // pic
+        productUpdate.setPicUrl(product.getPicUrl());
+
+        productRepository.save(productUpdate);
+        }
+        return productRepository.findById(id);
+//        return productById;
+    }
+
 //    @Override
 //    public Optional<Product> findSaleByProductId(int id) {
 //
