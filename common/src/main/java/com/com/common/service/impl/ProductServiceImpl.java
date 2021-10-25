@@ -53,11 +53,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> updateProduct(int id, Product product) {
+    public Product updateProduct(int id, Product product) throws NullPointerException {
         Optional<Product> productById= productRepository.findById(id);
         if (productById.isEmpty()){
-            return Optional.empty();
-        }else {
+            throw new NullPointerException();
+        }
         Product productUpdate=productById.get();
         productUpdate.setProductName(product.getProductName());
         productUpdate.setDescription(product.getDescription());
@@ -68,10 +68,8 @@ public class ProductServiceImpl implements ProductService {
         // pic
         productUpdate.setPicUrl(product.getPicUrl());
 
-        productRepository.save(productUpdate);
-        }
-        return productRepository.findById(id);
-//        return productById;
+        return productRepository.save(productUpdate);
+         //        return productRepository.save(productUpdate);
     }
 
 //    @Override

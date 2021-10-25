@@ -1,14 +1,18 @@
 package com.com.rest.endpoint;
 
 
+import com.com.common.dto.UserAuthDto;
+import com.com.common.dto.UserAuthResponseDto;
 import com.com.common.dto.UserDto;
 import com.com.common.dto.UserSaveDto;
 import com.com.common.model.User;
 import com.com.common.service.UserService;
+import com.com.rest.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,6 +27,8 @@ public class UserEndpoint {
 
     private final UserService userService;
     private final ModelMapper mapper;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/")
     public List<UserDto> getAllUser() {
@@ -57,6 +63,26 @@ public class UserEndpoint {
         return ResponseEntity.notFound().build();
     }
 
+    @PostMapping("/auth")
+    public ResponseEntity auth(@RequestBody UserAuthDto userAuthDto) {
+
+        Optional<User> userByEmail = userService.findUserByEmail(userAuthDto.getEmail());
+        if (userByEmail.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        User user = userByEmail.get();
+        if (passwordEncoder.matches(userAuthDto.getPassword(), user.getPassword())) {
+            return ResponseEntity.ok(
+                    UserAuthResponseDto.builder()
+                            .token(jwtTokenUtil.generateToken(user.getEmail()))
+                            .userDto(mapper.map(user, UserDto.class))
+                            .build()
+
+            );
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
     @PostMapping("/add")
     public ResponseEntity<UserDto> addUser(@RequestBody UserSaveDto userSaveDto) {
 
@@ -64,6 +90,7 @@ public class UserEndpoint {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
 //            return ResponseEntity.notFound().build();
         } else {
+            userSaveDto.setPassword(passwordEncoder.encode(userSaveDto.getPassword()));
             userService.addUser(mapper.map(userSaveDto, User.class));
         }
         return ResponseEntity.ok(mapper.map(userSaveDto, UserDto.class));
@@ -72,13 +99,13 @@ public class UserEndpoint {
     @PutMapping("/update/{id}")
     // except password
     public ResponseEntity<UserDto> updateUserById(@PathVariable("id") int id,
-                                                 @RequestBody UserSaveDto userSaveDto){
+                                                  @RequestBody UserSaveDto userSaveDto) {
 
-    if ((userService.updateUser(id,userSaveDto)).isEmpty()){
-        return ResponseEntity.notFound().build();
-    }
+        if ((userService.updateUser(id, userSaveDto)).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
 
-      return ResponseEntity.ok(mapper.map(userSaveDto, UserDto.class));
+        return ResponseEntity.ok(mapper.map(userSaveDto, UserDto.class));
     }
 
 }

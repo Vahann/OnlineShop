@@ -17,7 +17,7 @@ public interface ProductService {
 
     boolean nullifyProduct(int id);
 
-    Optional<Product> updateProduct(int id, Product product);
+    Product updateProduct(int id, Product product) throws NullPointerException;
 
 //    Optional<Product> findSaleByProductId(int id);
 

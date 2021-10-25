@@ -24,6 +24,7 @@ public class ProductEndpoint {
     private final ProductService productService;
 //    private final ProductRepository productRepository;
 
+//    @Value("${upload.dir}")
     @Value("${upload.dir}")
     private String uploadDir;
 
@@ -81,9 +82,13 @@ public class ProductEndpoint {
     @PutMapping("/update/{id}")
     public ResponseEntity<Product> updateProductById(@PathVariable("id") int id,
                                                      @RequestBody Product product) {
-        if ((productService.updateProduct(id, product)).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(product);
+       try {
+           Product productUpdate = productService.updateProduct(id, product);
+           return ResponseEntity.ok(productUpdate);
+       }catch (NullPointerException e){
+           return ResponseEntity.notFound().build();
+       }
+
+
     }
 }
