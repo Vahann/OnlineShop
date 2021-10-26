@@ -32,7 +32,8 @@ public class ResSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/users/**").hasAnyAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST, "/users/add").authenticated()
+                .antMatchers(HttpMethod.POST, "/users/add").permitAll() //  qnnarkman
+                .antMatchers(HttpMethod.DELETE, "/users/**").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/users/update/**").authenticated()
                 .antMatchers("/users/auth").permitAll();
 
