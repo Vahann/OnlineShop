@@ -2,9 +2,7 @@ package com.com.rest.endpoint;
 
 
 import com.com.common.model.Sale;
-import com.com.common.repository.SaleRepository;
 import com.com.common.service.SaleService;
-import com.com.common.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +47,7 @@ public class SaleEndpoint {
 
     @GetMapping("/{email}")
     public ResponseEntity<List<Sale>> searchSaleByUserEmail(@PathVariable("email") String email) {
-        Optional<List<Sale>> saleByUserEmail=saleService.findSalesByUserEmail(email);
+        Optional<List<Sale>> saleByUserEmail = saleService.findSalesByUserEmail(email);
 //        Optional<List<Sale>> saleByEmail = saleRepository.findSaleByUserEmail(email);
         if (saleByUserEmail.isEmpty()) {
             return ResponseEntity.notFound().build();

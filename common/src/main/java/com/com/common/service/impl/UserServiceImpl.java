@@ -1,6 +1,7 @@
 package com.com.common.service.impl;
 
 import com.com.common.dto.UserSaveDto;
+import com.com.common.exception.UserNotFoundException;
 import com.com.common.model.User;
 import com.com.common.repository.UserRepository;
 import com.com.common.service.UserService;
@@ -16,32 +17,51 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-
     @Override
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
+    //
     @Override
-    public Optional<User> findUserById(int id) {
-        return userRepository.findById(id);
-    }
-
-    @Override
-    public boolean changeStatusUser(int id) {
+    public User findUserById(int id) throws UserNotFoundException {
         Optional<User> userById = userRepository.findById(id);
-        if (userById.isPresent()) {
-            User user = userById.get();
-            user.setActiveProfile(!user.isActiveProfile());
-            userRepository.save(user);
-            return true;
+        if (userById.isEmpty()) {
+            throw new UserNotFoundException("User does not exist");
         }
-        return false;
+        return userById.get();
+    }
+
+    //
+    @Override
+    public Optional<User> findUserByEmail(String email) throws UserNotFoundException {
+        Optional<User> userById = userRepository.findByEmail(email);
+        if (userById.isEmpty()) {
+            throw new UserNotFoundException("User does not exist");
+        }
+
+        return userRepository.findByEmail(email);
+    }
+
+    ////    @Override
+////    public User findUserByEmail(String email) throws UserNotFoundException {
+////       Optional<User> userByEmail=userRepository.findByEmail(email);
+////       if (userByEmail.isEmpty()){
+////           throw  new UserNotFoundException();
+////       }
+////       return userByEmail.get();
+////    }
+//
+    @Override
+    public boolean changeStatusUser(int id) throws UserNotFoundException {
+        User user = findUserById(id);
+        user.setActiveProfile(!user.isActiveProfile());
+        userRepository.save(user);
+        return true;
     }
 
     @Override
-    public Optional<User> findUserByEmail(String email) {
-
+    public Optional<User> checkUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -51,23 +71,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> updateUser(int id, UserSaveDto userSaveDto) {
-        Optional<User> userById = userRepository.findById(id);
-        if (userById.isEmpty()) {
-            return Optional.empty();
+    public User updateUser(UserSaveDto userSaveDto) throws UserNotFoundException {
+        Optional<User> userByEmail = findUserByEmail(userSaveDto.getEmail());
+        if (userByEmail.isEmpty()) {
+            throw new UserNotFoundException("User does not exist, email not found");
         }
-        User userUpdate = userById.get();
+        User userUpdate = userByEmail.get();
+
         userUpdate.setName(userSaveDto.getName());
         userUpdate.setSurname(userSaveDto.getSurname());
         userUpdate.setEmail(userSaveDto.getEmail());
         userUpdate.setPhoneNumber(userSaveDto.getPhoneNumber());
         userUpdate.setGender(userSaveDto.getGender());
+//        userUpdate.setActiveProfile(userSaveDto.isActive());
         userUpdate.setAge(userSaveDto.getAge());
         userUpdate.setRole(userSaveDto.getRole());
 
-        userRepository.save(userUpdate);
-
-        return userRepository.findById(id);
-//        return userBiId;
+        return userRepository.save(userUpdate);
     }
 }

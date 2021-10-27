@@ -1,5 +1,6 @@
 package com.com.common.service.impl;
 
+import com.com.common.exception.ProductNotFoundException;
 import com.com.common.model.Product;
 import com.com.common.repository.ProductRepository;
 import com.com.common.service.ProductService;
@@ -15,50 +16,38 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-
     @Override
     public List<Product> findAllProducts() {
         return productRepository.findAll();
     }
 
     @Override
-    public Optional<Product> findProductById(int id) {
-
-        return productRepository.findById(id);
-    }
-
-    @Override
-    public void addProduct(Product product) {  //MultipartFile multipartFile
-
-        productRepository.save(product);
-    }
-
-//    @Override
-//    public void updateProduct(Product product) {
-//
-//    }
-
-
-
-    @Override
-    public boolean nullifyProduct(int id) {    //deleteProduct
+    public Product findProductById(int id) throws ProductNotFoundException {
         Optional<Product> productById = productRepository.findById(id);
-        if (productById.isPresent()) {
-            Product product = productById.get();
-            product.setCount(0);
-            productRepository.save(product);
-            return true;
+        if (productById.isEmpty()) {
+            throw new ProductNotFoundException("Product does not exist");
         }
-        return false;
+        return productById.get();
     }
 
     @Override
-    public Product updateProduct(int id, Product product) throws NullPointerException {
-        Optional<Product> productById= productRepository.findById(id);
-        if (productById.isEmpty()){
-            throw new NullPointerException();
-        }
-        Product productUpdate=productById.get();
+    public boolean nullifyProduct(int id) throws ProductNotFoundException {
+        Product productById = findProductById(id);
+        productById.setCount(0);
+        productRepository.save(productById);
+        return true;
+    }
+
+    @Override
+    public Product addProduct(Product product) {
+        return productRepository.save(product);
+    }
+
+    @Override
+    public Product updateProduct(int id, Product product) throws ProductNotFoundException {
+
+        Product productUpdate = findProductById(id);
+
         productUpdate.setProductName(product.getProductName());
         productUpdate.setDescription(product.getDescription());
         productUpdate.setPrice(product.getPrice());
@@ -69,13 +58,5 @@ public class ProductServiceImpl implements ProductService {
         productUpdate.setPicUrl(product.getPicUrl());
 
         return productRepository.save(productUpdate);
-         //        return productRepository.save(productUpdate);
     }
-
-//    @Override
-//    public Optional<Product> findSaleByProductId(int id) {
-//
-//
-//        return Optional.empty();
-//    }
 }

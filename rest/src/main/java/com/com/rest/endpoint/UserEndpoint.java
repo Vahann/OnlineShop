@@ -5,6 +5,7 @@ import com.com.common.dto.UserAuthDto;
 import com.com.common.dto.UserAuthResponseDto;
 import com.com.common.dto.UserDto;
 import com.com.common.dto.UserSaveDto;
+import com.com.common.exception.UserNotFoundException;
 import com.com.common.model.User;
 import com.com.common.service.UserService;
 import com.com.rest.util.JwtTokenUtil;
@@ -39,24 +40,17 @@ public class UserEndpoint {
             userDtos.add(userDto);
         }
         return userDtos;
-//        return userService.findAllUsers();
     }
 
+    //
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable("id") int id) {
-
-        Optional<User> userById = userService.findUserById(id);
-        if (userById.isEmpty()) {
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        }
-
-        return ResponseEntity.ok(mapper.map(userById.get(), UserDto.class));
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") int id) throws UserNotFoundException {
+        return ResponseEntity.ok(mapper.map(userService.findUserById(id), UserDto.class));
     }
 
+    //
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserSaveDto> deleteUserById(@PathVariable("id") int id) {
+    public ResponseEntity<UserSaveDto> deleteUserById(@PathVariable("id") int id) throws UserNotFoundException {
         if (userService.changeStatusUser(id)) {
             return ResponseEntity.noContent().build();
         }
@@ -64,9 +58,9 @@ public class UserEndpoint {
     }
 
     @PostMapping("/auth")
-    public ResponseEntity auth(@RequestBody UserAuthDto userAuthDto) {
+    public ResponseEntity auth(@RequestBody UserAuthDto userAuthDto) throws UserNotFoundException {
 
-        Optional<User> userByEmail = userService.findUserByEmail(userAuthDto.getEmail());
+        Optional<User> userByEmail = userService.checkUserByEmail(userAuthDto.getEmail());
         if (userByEmail.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -76,9 +70,7 @@ public class UserEndpoint {
                     UserAuthResponseDto.builder()
                             .token(jwtTokenUtil.generateToken(user.getEmail()))
                             .userDto(mapper.map(user, UserDto.class))
-                            .build()
-
-            );
+                            .build());
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
@@ -86,9 +78,8 @@ public class UserEndpoint {
     @PostMapping("/add")
     public ResponseEntity<UserDto> addUser(@RequestBody UserSaveDto userSaveDto) {
 
-        if (userService.findUserByEmail(userSaveDto.getEmail()).isPresent()) {
+        if (userService.checkUserByEmail(userSaveDto.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//            return ResponseEntity.notFound().build();
         } else {
             userSaveDto.setPassword(passwordEncoder.encode(userSaveDto.getPassword()));
             userService.addUser(mapper.map(userSaveDto, User.class));
@@ -96,16 +87,11 @@ public class UserEndpoint {
         return ResponseEntity.ok(mapper.map(userSaveDto, UserDto.class));
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update")
     // except password
-    public ResponseEntity<UserDto> updateUserById(@PathVariable("id") int id,
-                                                  @RequestBody UserSaveDto userSaveDto) {
+    public ResponseEntity<UserDto> updateUserById(@RequestBody UserSaveDto userSaveDto) throws UserNotFoundException {
+        User user = mapper.map(userService.updateUser(userSaveDto), User.class);
 
-        if ((userService.updateUser(id, userSaveDto)).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(mapper.map(userSaveDto, UserDto.class));
+        return ResponseEntity.ok(mapper.map(user, UserDto.class));
     }
-
 }

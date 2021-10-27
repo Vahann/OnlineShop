@@ -18,10 +18,31 @@ public class CurrentUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = userService.findUserByEmail(email); //.orElse(null)
+        Optional<User> user = userService.checkUserByEmail(email); //.orElse(null)
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
         return new CurrentUser(user.get());
     }
+//        User user = null;
+//        try {
+//            user = userService.findUserByEmail(email);//.orElse(null);
+//        } catch (UserNotFoundException e) {
+//            e.printStackTrace();
+//        }
+////        if (user == null) {
+////            throw new UsernameNotFoundException("Username not found");
+////        }
+//        return new CurrentUser(user);
+//
+//    }
+
+//    @Override
+//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//        Optional<User> user = userService.findUserByEmail(email);
+//        if (user.isEmpty()) {
+//            throw new UsernameNotFoundException("Username not found");
+//        }
+//        return new CurrentUser(user.get());
+//    }
 }

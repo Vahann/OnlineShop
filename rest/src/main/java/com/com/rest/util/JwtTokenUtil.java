@@ -38,61 +38,62 @@ public class JwtTokenUtil {
         return claimsResolver.apply(claims);
     }
 
-    private Claims getAllClaimsFromToken(String token){
+    private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    private Boolean isTokenExpired(String token){
-        final Date expiration=getExpirationDateFromToken(token);
+    private Boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
 
-    public String generateToken(String email){
-        Map<String,Object> claims=new HashMap<>();
-        return doGenerateToken(claims,email);
+    public String generateToken(String email) {
+        Map<String, Object> claims = new HashMap<>();
+        return doGenerateToken(claims, email);
     }
-    private String doGenerateToken(Map<String,Object> claims,String subject){
-        final  Date createdDate=new Date();
-        final Date expirationDate=calculateExpirationDate(createdDate);
+
+    private String doGenerateToken(Map<String, Object> claims, String subject) {
+        final Date createdDate = new Date();
+        final Date expirationDate = calculateExpirationDate(createdDate);
 
         //для проверки
-        System.out.println("doGenerateToken"+createdDate);
+        System.out.println("doGenerateToken" + createdDate);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512,secret)
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
-    public String refreshToken(String token){
-        final Date createdDate= new Date();
-        final Date expirationDate=calculateExpirationDate(createdDate);
-        final Claims claims=getAllClaimsFromToken(token);
+    public String refreshToken(String token) {
+        final Date createdDate = new Date();
+        final Date expirationDate = calculateExpirationDate(createdDate);
+        final Claims claims = getAllClaimsFromToken(token);
         claims.setIssuedAt(createdDate);
         claims.setExpiration(expirationDate);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS512,secret)
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
-    public Boolean validateToken(String token,String email){
-        final String userEmail= getUsernameFromToken(token);
-        final Date created= getIssuedAtDateFromToken(token);
+    public Boolean validateToken(String token, String email) {
+        final String userEmail = getUsernameFromToken(token);
+        final Date created = getIssuedAtDateFromToken(token);
 
         //final Date expiration= getExpirationDateFromToken(token);
-        return (userEmail.equals(email)&& !isTokenExpired(token));
+        return (userEmail.equals(email) && !isTokenExpired(token));
     }
 
-    private Date calculateExpirationDate(Date createdDate){
-        return new Date(createdDate.getTime()+expiration * 1000);
+    private Date calculateExpirationDate(Date createdDate) {
+        return new Date(createdDate.getTime() + expiration * 1000);
     }
 
 }

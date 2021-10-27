@@ -13,7 +13,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SaleServiceImpl implements SaleService {
 
-   private final SaleRepository saleRepository;
+    private final SaleRepository saleRepository;
 
     @Override
     public List<Sale> findAllSales() {

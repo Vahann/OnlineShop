@@ -11,8 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @SpringBootApplication
-@ComponentScan({"com.com.common.*","com.com.rest.*"})
-@EnableJpaRepositories(basePackages = {"com.com.common.*","com.com.rest.*"})
+@ComponentScan({"com.com.common.*", "com.com.rest.*"})
+@EnableJpaRepositories(basePackages = {"com.com.common.*", "com.com.rest.*"})
 @EntityScan({"com.com.common.*"})
 
 public class RestApplication {
@@ -20,8 +20,9 @@ public class RestApplication {
     public static void main(String[] args) {
         SpringApplication.run(RestApplication.class, args);
     }
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
