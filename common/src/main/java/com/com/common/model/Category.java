@@ -22,6 +22,5 @@ public class Category {
     private String categoryName;
 
     @ManyToMany
-//    @JoinColumn(name = "product")
     private List<Product> product;
 }

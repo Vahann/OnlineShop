@@ -1,13 +1,25 @@
 package com.com.common.service;
 
+import com.com.common.exception.ProductNotFoundException;
 import com.com.common.model.Product;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
+    List<Product> findAllProducts();
 
+    Product findProductById(int id) throws ProductNotFoundException;
+
+    boolean nullifyProduct(int id) throws ProductNotFoundException;
+
+    Product addProduct(Product product);
+
+    Product updateProduct(int id, Product product) throws ProductNotFoundException;
+
+
+//Ok 
+ /**
     List<Product> findAllProducts();
 
     Optional<Product> findProductById(int id);
@@ -16,7 +28,9 @@ public interface ProductService {
 
     boolean nullifyProduct(int id);
 
-//    Optional<Product> findSaleByProductId(int id);
+    Product updateProduct(int id, Product product) throws ProductNotFoundException;
+    */
+//   OK 
 
 
 }
