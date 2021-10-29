@@ -53,8 +53,8 @@ public class UserServiceImpl implements UserService {
 ////    }
 //
     @Override
-    public boolean changeStatusUser(int id) throws UserNotFoundException {
-        User user = findUserById(id);
+    public boolean changeStatusUser(String email) throws UserNotFoundException {
+        User user = findUserByEmail(email).get();
         user.setActiveProfile(!user.isActiveProfile());
         userRepository.save(user);
         return true;
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     public User updateUser(UserSaveDto userSaveDto) throws UserNotFoundException {
         Optional<User> userByEmail = findUserByEmail(userSaveDto.getEmail());
         if (userByEmail.isEmpty()) {
-            throw new UserNotFoundException("User does not exist, email not found");
+            throw new UserNotFoundException();
         }
         User userUpdate = userByEmail.get();
 

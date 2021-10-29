@@ -6,7 +6,7 @@ public class UserNotFoundException extends Exception {
     }
 
     public UserNotFoundException(String message) {
-        super(message);
+        super(message="User does not exist, email not found");
     }
 
     public UserNotFoundException(String message, Throwable cause) {

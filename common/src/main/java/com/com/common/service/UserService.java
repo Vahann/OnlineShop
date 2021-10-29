@@ -15,7 +15,7 @@ public interface UserService {
 //
     Optional<User> findUserByEmail(String email) throws UserNotFoundException;
 //
-    boolean changeStatusUser(int id) throws UserNotFoundException;
+    boolean changeStatusUser(String email) throws UserNotFoundException;
 //
     Optional<User> checkUserByEmail(String email);
 
