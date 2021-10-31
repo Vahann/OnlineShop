@@ -7,6 +7,7 @@ import com.com.common.dto.UserDto;
 import com.com.common.dto.UserSaveDto;
 import com.com.common.exception.UserNotFoundException;
 import com.com.common.model.User;
+import com.com.common.service.EmailService;
 import com.com.common.service.UserService;
 import com.com.rest.security.CurrentUser;
 import com.com.rest.util.JwtTokenUtil;
@@ -34,6 +35,7 @@ public class UserEndpoint {
     private final ModelMapper mapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtil jwtTokenUtil;
+    private final EmailService emailService;
 
     @GetMapping("/")
     public List<UserDto> getAllUser(@AuthenticationPrincipal CurrentUser currentUser) {
@@ -99,6 +101,8 @@ public class UserEndpoint {
             userSaveDto.setPassword(passwordEncoder.encode(userSaveDto.getPassword()));
             userService.addUser(mapper.map(userSaveDto, User.class));
             log.info("successful addition of user {}",userSaveDto.getEmail());
+            emailService.send(userSaveDto.getEmail(), "welcome", "dear  "+userSaveDto.getName()+
+                    ", you successfuly registreted"  );
         }
         return ResponseEntity.ok(mapper.map(userSaveDto, UserDto.class));
     }
