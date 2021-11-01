@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
@@ -17,11 +18,20 @@ import javax.persistence.Enumerated;
 public class UserSaveDto {
     @Enumerated(EnumType.STRING)
     private Role role;
+    @NotNull
+    @NotEmpty(message = "Name is required")
     private String name;
+    @Max(33)
     private String surname;
+    @Email
+    @NotNull
     private String email;
+    @Size(max = 11, min = 6)
     private String password;
+
+    @NotEmpty(message = "phone number must start with +")
     private String phoneNumber;
+    @Min(3)
     private int age;
     private boolean isActive;
 

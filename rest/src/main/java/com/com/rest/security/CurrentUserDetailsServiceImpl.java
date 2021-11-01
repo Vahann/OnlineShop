@@ -1,8 +1,11 @@
 package com.com.rest.security;
 
+import com.com.common.exception.UserNotFoundException;
 import com.com.common.model.User;
 import com.com.common.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +26,24 @@ public class CurrentUserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
         return new CurrentUser(user.get());
+    }
+    public User currentUser() throws UserNotFoundException {
+        String loggedInUserEmail = getLoggedInUserEmail(false);
+        return userService.findUserByEmail(loggedInUserEmail)
+                .orElse(null);
+}
+
+    private String getLoggedInUserEmail(boolean isThrowException) throws UserNotFoundException {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof org.springframework.security.core.userdetails.User)
+                return ((org.springframework.security.core.userdetails.User) principal).getUsername();
+        }
+        if(isThrowException){
+            throw new UserNotFoundException("No user has been authenticated on this request");
+        }
+        return "";
     }
 //        User user = null;
 //        try {

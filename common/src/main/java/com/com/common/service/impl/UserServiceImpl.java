@@ -92,11 +92,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void verifyUser(String email, String token) throws UserNotFoundException {
         Optional<User> byEmail = findUserByEmail(email);
+//        if (byEmail.isPresent()) {
+//            User user = byEmail.get();
+//            if (user.getToken().equals(UUID.fromString(token))) {
+//                user.setActiveProfile(true);
+//                user.setToken(null);
         if (byEmail.isPresent()) {
             User user = byEmail.get();
-            if (user.getToken().equals(UUID.fromString(token))) {
+            if (user.getToken().equals(token)) {
                 user.setActiveProfile(true);
-                user.setToken(null);
+                user.setToken("");
                 userRepository.save(user);
             }
         }

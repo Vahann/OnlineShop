@@ -2,9 +2,11 @@ package com.com.rest.endpoint;
 
 
 import com.com.common.exception.ProductNotFoundException;
+import com.com.common.exception.UserNotFoundException;
 import com.com.common.model.Product;
 import com.com.common.service.ProductService;
 import com.com.rest.security.CurrentUser;
+import com.com.rest.security.CurrentUserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -31,6 +33,8 @@ public class ProductEndpoint {
 
 
     private final ProductService productService;
+    private final CurrentUserDetailsServiceImpl currentService;
+
 
     @Value("${upload.dir}")
     private String uploadDir;
@@ -41,33 +45,29 @@ public class ProductEndpoint {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") int id, @AuthenticationPrincipal
-                                    CurrentUser currentUser) throws ProductNotFoundException {
-        log.info("User {} searching product by id ", currentUser.getUser().getEmail());
+    public ResponseEntity<Product> getProductById(@PathVariable("id") int id) throws ProductNotFoundException, UserNotFoundException {
+        log.info("User {} searching product by id ", currentService.currentUser().getEmail());
         return ResponseEntity.ok(productService.findProductById(id));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProductById(@PathVariable("id") int id, @AuthenticationPrincipal
-                                     CurrentUser currentUser) throws ProductNotFoundException {
-        log.info("User {} deleted product by id {} ", currentUser.getUser().getEmail(), productService.findProductById(id).getProductName());
+    public void deleteProductById(@PathVariable("id") int id) throws ProductNotFoundException, UserNotFoundException {
+        log.info("User {} deleted product by id {} ", currentService.currentUser().getEmail(), productService.findProductById(id).getProductName());
         productService.nullifyProduct(id);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Product> addProducts(@RequestBody Product product,@AuthenticationPrincipal
-                                                 CurrentUser currentUser) {
+    public ResponseEntity<Product> addProducts(@RequestBody Product product) throws UserNotFoundException {
         if (product == null) {
-            log.info("user {} tried to add a product ", currentUser.getUser().getEmail());
+            log.info("user {} tried to add a product ", currentService.currentUser().getEmail());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        log.info("user {} to add a product{} ", currentUser.getUser().getEmail(),product);
+        log.info("user {} to add a product{} ", currentService.currentUser().getEmail(),product);
         return ResponseEntity.ok(productService.addProduct(product));
     }
 
     @PostMapping("/addImage/{productId}")
-    public ResponseEntity addImage(@PathVariable("productId") int productId ,@AuthenticationPrincipal
-            CurrentUser currentUser, @RequestParam(value = "image") MultipartFile multipartFile) throws IOException, ProductNotFoundException {
+    public ResponseEntity addImage(@PathVariable("productId") int productId, @RequestParam(value = "image") MultipartFile multipartFile) throws IOException, ProductNotFoundException, UserNotFoundException {
 
         Product productById = productService.findProductById(productId);
 
@@ -76,7 +76,7 @@ public class ProductEndpoint {
 
         productById.setPicUrl(pic);
         productService.addProduct(productById);
-        log.info("user {} to add image a product {} ", currentUser.getUser().getEmail(),productById);
+        log.info("user {} to add image a product {} ",currentService.currentUser().getEmail(),productById);
         return ResponseEntity.ok().build();
     }
 
