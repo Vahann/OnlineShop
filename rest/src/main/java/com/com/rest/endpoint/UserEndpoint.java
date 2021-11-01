@@ -20,8 +20,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Slf4j
@@ -92,17 +94,18 @@ public class UserEndpoint {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<UserDto> addUser(@RequestBody UserSaveDto userSaveDto) {
+    public ResponseEntity<UserDto> addUser(@RequestBody UserSaveDto userSaveDto, Locale locale) throws MessagingException {
 
         if (userService.checkUserByEmail(userSaveDto.getEmail()).isPresent()) {
             log.info("unsuccessful addition user");
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } else {
             userSaveDto.setPassword(passwordEncoder.encode(userSaveDto.getPassword()));
-            userService.addUser(mapper.map(userSaveDto, User.class));
+            userService.addUser(mapper.map(userSaveDto, User.class),locale);
             log.info("successful addition of user {}",userSaveDto.getEmail());
-            emailService.send(userSaveDto.getEmail(), "welcome", "dear  "+userSaveDto.getName()+
-                    ", you successfuly registreted"  );
+//            emailService.send(userSaveDto.getEmail(), "welcome", "dear  "+userSaveDto.getName()+
+//                    ", you successfuly registreted"  );
+
         }
         return ResponseEntity.ok(mapper.map(userSaveDto, UserDto.class));
     }
@@ -115,5 +118,12 @@ public class UserEndpoint {
         log.info("the CurrentUser {} successfully updated the data of another user {}",
                 currentUser.getUser().getEmail(),user);
         return ResponseEntity.ok(mapper.map(user, UserDto.class));
+    }
+
+    @GetMapping("/verifyEmail")
+    public ResponseEntity verifyEmail(@RequestParam ("email") String email,
+                                              @RequestParam ("token") String token) throws UserNotFoundException {
+        userService.verifyUser(email, token);
+        return ResponseEntity.ok().build();
     }
 }

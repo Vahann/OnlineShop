@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -31,6 +32,7 @@ public class User {
     private String password;
     private String phoneNumber;
     private boolean activeProfile;
+    private String token;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;

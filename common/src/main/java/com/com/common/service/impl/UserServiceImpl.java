@@ -4,18 +4,29 @@ import com.com.common.dto.UserSaveDto;
 import com.com.common.exception.UserNotFoundException;
 import com.com.common.model.User;
 import com.com.common.repository.UserRepository;
+import com.com.common.service.EmailService;
 import com.com.common.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final EmailService emailService;
+
+    @Value("${site.url}")
+    private String siteUrl;
 
     @Override
     public List<User> findAllUsers() {
@@ -66,8 +77,40 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addUser(User user) {
+    public void sendVerificationEmail(User user) throws MessagingException {
+        UUID uuid = UUID.randomUUID();
+        user.setToken(uuid.toString());
         userRepository.save(user);
+        String verifyUrl = siteUrl + "/verifyEmail?email="+user.getEmail()+"&token="+uuid;
+//        emailService.send(user.getEmail(), "Verify acc",
+//                "HI "+ user.getName()+", \n" +
+//                String.format("please click on %s ", verifyUrl));
+        emailService.sendHtmlEmail(user.getEmail(), "VERIFy acc", user, verifyUrl, "verifyTemplate");
+
+    }
+
+    @Override
+    public void verifyUser(String email, String token) throws UserNotFoundException {
+        Optional<User> byEmail = findUserByEmail(email);
+        if (byEmail.isPresent()) {
+            User user = byEmail.get();
+            if (user.getToken().equals(UUID.fromString(token))) {
+                user.setActiveProfile(true);
+                user.setToken(null);
+                userRepository.save(user);
+            }
+        }
+
+    }
+
+    @Override
+    public void addUser(User user, Locale locale) {
+        userRepository.save(user);
+        try {
+            sendVerificationEmail(user);
+        } catch (MessagingException e) {
+            log.error(e.getMessage());
+        }
     }
 
     @Override
@@ -89,4 +132,7 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.save(userUpdate);
     }
+
+
+
 }

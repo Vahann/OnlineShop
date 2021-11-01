@@ -4,7 +4,9 @@ import com.com.common.dto.UserSaveDto;
 import com.com.common.exception.UserNotFoundException;
 import com.com.common.model.User;
 
+import javax.mail.MessagingException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 public interface UserService {
@@ -19,6 +21,10 @@ public interface UserService {
 //
     Optional<User> checkUserByEmail(String email);
 
+    void sendVerificationEmail(User user) throws MessagingException;
+
+    void verifyUser(String email, String token) throws UserNotFoundException;
+
 /**
  //OK
     List<User> findAllUsers();
@@ -32,7 +38,7 @@ public interface UserService {
 /**
     Optional<User> findUserByEmail(String email);
 */
-    void addUser(User user);
+    void addUser(User user, Locale locale) throws MessagingException;
 //    Optional<User> addUser(User user);
 
     User updateUser(UserSaveDto userSaveDto) throws UserNotFoundException;
