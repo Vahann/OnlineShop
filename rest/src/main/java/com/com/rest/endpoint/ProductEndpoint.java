@@ -51,8 +51,12 @@ public class ProductEndpoint {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProductById(@PathVariable("id") int id) throws ProductNotFoundException, UserNotFoundException {
-        log.info("User {} deleted product by id {} ", currentService.currentUser().getEmail(), productService.findProductById(id).getProductName());
+    public void deleteProductById(@PathVariable("id") int id)
+            throws ProductNotFoundException, UserNotFoundException {
+        log.info("User {} deleted product by id {} ",
+                currentService.currentUser().getEmail(),
+                productService.findProductById(id).getProductName());
+        // Boolean chi ogtagorcvi!!!
         productService.nullifyProduct(id);
     }
 
@@ -62,7 +66,7 @@ public class ProductEndpoint {
             log.info("user {} tried to add a product ", currentService.currentUser().getEmail());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        log.info("user {} to add a product{} ", currentService.currentUser().getEmail(),product);
+        log.info("user {} to add a product{} ", currentService.currentUser().getEmail(), product);
         return ResponseEntity.ok(productService.addProduct(product));
     }
 
@@ -76,7 +80,7 @@ public class ProductEndpoint {
 
         productById.setPicUrl(pic);
         productService.addProduct(productById);
-        log.info("user {} to add image a product {} ",currentService.currentUser().getEmail(),productById);
+        log.info("user {} to add image a product {} ", currentService.currentUser().getEmail(), productById);
         return ResponseEntity.ok().build();
     }
 
@@ -90,9 +94,29 @@ public class ProductEndpoint {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Product> updateProductById(@PathVariable("id") int id,
-                                                     @RequestBody Product product,@AuthenticationPrincipal
-                                                     CurrentUser currentUser) throws ProductNotFoundException {
-        log.info("user {} to update a product{} ", currentUser.getUser().getEmail(),product);
+                                                     @RequestBody Product product, @AuthenticationPrincipal
+                                                             CurrentUser currentUser) throws ProductNotFoundException {
+        log.info("user {} to update a product{} ", currentUser.getUser().getEmail(), product);
         return ResponseEntity.ok(productService.updateProduct(id, product));
+    }
+
+//    @GetMapping("/category/{categoryName}")
+//    public ResponseEntity<List<Product>> productCategory(@PathVariable("categoryName") String categoryName) {
+//        List<Product> products = productService.findProductByCategoryName(categoryName);
+//        return ResponseEntity.ok(products);
+//        //ete anuny sxal ga list-i size>>0
+//    }
+
+    @GetMapping("/productFilter/{variable}/method/{method}")
+    public List<Product> productFilter(@PathVariable("variable") String variable,
+                                       @PathVariable("method") String method) {
+
+        return productService.filterForProduct(variable, method);
+    }
+
+    @GetMapping("/price/{startPrice}/{endPrice}")
+    public List<Product> searchProductByPrice(@PathVariable("startPrice") double startPrice,
+                                              @PathVariable("endPrice") double endPrice) {
+        return productService.findProductByPriceBetween(startPrice, endPrice);
     }
 }

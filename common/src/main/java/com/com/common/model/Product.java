@@ -32,6 +32,9 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Size size;
 
+    @ManyToOne
+    private Category category;
+
     // private Date productAddDate; // update SQL
 
     private String picUrl;

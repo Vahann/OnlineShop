@@ -1,6 +1,5 @@
 package com.com.common.service;
 
-import com.com.common.dto.UserSaveDto;
 import com.com.common.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
@@ -14,7 +13,6 @@ import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.Locale;
 
 @Service
 public class EmailService {
@@ -50,7 +48,7 @@ public class EmailService {
         final MimeMessageHelper message =
                 new MimeMessageHelper(mimeMessage, true, "UTF-8"); // true = multipart
         message.setSubject(subject);
-      //  message.setFrom("info@example.com");
+        //  message.setFrom("info@example.com");
         message.setTo(to);
 
         message.setText(htmlContent, true); // true = isHtml

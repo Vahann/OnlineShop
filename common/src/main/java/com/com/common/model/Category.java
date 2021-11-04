@@ -19,8 +19,6 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String categoryName;
+    private String name;
 
-    @ManyToMany
-    private List<Product> product;
 }
