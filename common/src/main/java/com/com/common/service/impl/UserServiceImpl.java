@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
 //        emailService.send(user.getEmail(), "Verify acc",
 //                "HI "+ user.getName()+", \n" +
 //                String.format("please click on %s ", verifyUrl));
-        emailService.sendHtmlEmail(user.getEmail(), "VERIFy acc", user, verifyUrl, "verifyTemplate");
+        emailService.sendHtmlEmail(user.getEmail(), "Verify your account in OnlineShop", user, verifyUrl, "verifyTemplate");
 
     }
 

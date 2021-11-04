@@ -18,20 +18,16 @@ import javax.validation.constraints.*;
 public class UserSaveDto {
     @Enumerated(EnumType.STRING)
     private Role role;
-    @NotNull
-    @NotEmpty(message = "Name is required")
     private String name;
-    @Max(33)
+
     private String surname;
     @Email
-    @NotNull
     private String email;
-    @Size(max = 11, min = 6)
+    @Size(max = 11, min = 1)
     private String password;
 
-    @NotEmpty(message = "phone number must start with +")
     private String phoneNumber;
-    @Min(3)
+
     private int age;
     private boolean isActive;
 
