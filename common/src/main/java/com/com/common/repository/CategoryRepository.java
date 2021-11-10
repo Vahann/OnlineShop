@@ -1,19 +1,14 @@
 package com.com.common.repository;
 
 import com.com.common.model.Category;
-import com.com.common.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface CategoryRepository extends JpaRepository<Category,Integer> {
-
-//    List<Category> findProductByCategoryName(String categoryName);
-    List<Category> findCategoryByName(String name);
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
 
-//    List<Product> findProductByCategory(String categoryName);
-//
-//    @Override
-//    List<Product> findProductByCategoryName(String categoryName);
+    Optional<Category> findCategoryByName(String name);
+
+
 }

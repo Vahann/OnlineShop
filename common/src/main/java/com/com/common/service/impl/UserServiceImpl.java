@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    //
     @Override
     public User findUserById(int id) throws UserNotFoundException {
         Optional<User> userById = userRepository.findById(id);
@@ -43,26 +42,25 @@ public class UserServiceImpl implements UserService {
         return userById.get();
     }
 
-    //
-    @Override
-    public Optional<User> findUserByEmail(String email) throws UserNotFoundException {
-        Optional<User> userById = userRepository.findByEmail(email);
-        if (userById.isEmpty()) {
-            throw new UserNotFoundException("User does not exist");
-        }
+//    @Override
+//    public Optional<User> findUserByEmail(String email) throws UserNotFoundException {
+//        Optional<User> userById = userRepository.findByEmail(email);
+//        if (userById.isEmpty()) {
+//            throw new UserNotFoundException("User does not exist");
+//        }
+//
+//        return userRepository.findByEmail(email);
+//    }
 
-        return userRepository.findByEmail(email);
+        @Override
+    public Optional<User> findUserByEmail(String email) throws UserNotFoundException {
+       Optional<User> userByEmail=userRepository.findByEmail(email);
+       if (userByEmail.isEmpty()){
+           throw  new UserNotFoundException("User does not exist");
+       }
+       return userByEmail;
     }
 
-    ////    @Override
-////    public User findUserByEmail(String email) throws UserNotFoundException {
-////       Optional<User> userByEmail=userRepository.findByEmail(email);
-////       if (userByEmail.isEmpty()){
-////           throw  new UserNotFoundException();
-////       }
-////       return userByEmail.get();
-////    }
-//
     @Override
     public boolean changeStatusUser(String email) throws UserNotFoundException {
         User user = findUserByEmail(email).get();

@@ -25,4 +25,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     List<Product> findProductBySize(Size size);
 
+    List<Product> findProductProductByPrice(double price);
 }

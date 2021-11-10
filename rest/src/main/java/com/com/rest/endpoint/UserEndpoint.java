@@ -50,14 +50,14 @@ public class UserEndpoint {
         return userDtos;
     }
 
-    //
+
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("id") int id) throws UserNotFoundException {
-        log.info("User {} searching User by id", currentService.currentUser().getEmail());
+        log.info("User {} searching User by id {}", currentService.currentUser().getEmail(), id);
         return ResponseEntity.ok(mapper.map(userService.findUserById(id), UserDto.class));
     }
 
-    //
+
     @DeleteMapping("/{email}")
     public ResponseEntity<UserSaveDto> deleteUserByEmail(@PathVariable("email") String email) throws UserNotFoundException {
         if (userService.changeStatusUser(email)) {
@@ -65,7 +65,7 @@ public class UserEndpoint {
 
             return ResponseEntity.noContent().build();
         }
-        log.info("User {} tried to deleted User by id ", currentService.currentUser().getEmail());
+        log.warn("User {} tried to change status User by id ", currentService.currentUser().getEmail());
         return ResponseEntity.notFound().build();
     }
 
@@ -94,12 +94,12 @@ public class UserEndpoint {
     public ResponseEntity<UserDto> addUser(@RequestBody @Valid UserSaveDto userSaveDto, Locale locale) throws MessagingException {
 
         if (userService.checkUserByEmail(userSaveDto.getEmail()).isPresent()) {
-            log.info("unsuccessful addition user");
+            log.warn("unsuccessful addition user");
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } else {
             userSaveDto.setPassword(passwordEncoder.encode(userSaveDto.getPassword()));
-            userService.addUser(mapper.map(userSaveDto, User.class),locale);
-            log.info("successful addition of user {}",userSaveDto.getEmail());
+            userService.addUser(mapper.map(userSaveDto, User.class), locale);
+            log.info("successful addition of user {}", userSaveDto.getEmail());
 //            emailService.send(userSaveDto.getEmail(), "welcome", "dear  "+userSaveDto.getName()+
 //                    ", you successfuly registreted"  );
 
@@ -112,16 +112,16 @@ public class UserEndpoint {
     public ResponseEntity<UserDto> updateUserById(@RequestBody @Valid UserSaveDto userSaveDto) throws UserNotFoundException {
         User user = mapper.map(userService.updateUser(userSaveDto), User.class);
         log.info("the CurrentUser {} successfully updated the data of another user {}",
-                currentService.currentUser().getEmail(),user);
+                currentService.currentUser().getEmail(), user);
         return ResponseEntity.ok(mapper.map(user, UserDto.class));
     }
 
     @GetMapping("/verifyEmail")
-    public ResponseEntity verifyEmail(@RequestParam ("email") String email,
-                                              @RequestParam ("token") String token) throws UserNotFoundException {
+    public ResponseEntity verifyEmail(@RequestParam("email") String email,
+                                      @RequestParam("token") String token) throws UserNotFoundException {
         userService.verifyUser(email, token);
-        log.info("User {} verified",currentService.currentUser().getEmail());
-       // userRepository.save();
-                return ResponseEntity.ok().build();
+        log.info("User {} verified", currentService.currentUser().getEmail());
+        // userRepository.save();
+        return ResponseEntity.ok().build();
     }
 }

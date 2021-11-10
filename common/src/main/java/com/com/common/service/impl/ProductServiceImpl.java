@@ -1,5 +1,6 @@
 package com.com.common.service.impl;
 
+import com.com.common.dto.ProductDto;
 import com.com.common.exception.ProductNotFoundException;
 import com.com.common.model.Product;
 import com.com.common.model.enums.ProductForGender;
@@ -8,6 +9,7 @@ import com.com.common.repository.ProductRepository;
 import com.com.common.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final ModelMapper mapper;
 
     @Override
     public List<Product> findAllProducts() {
@@ -61,6 +64,7 @@ public class ProductServiceImpl implements ProductService {
         productUpdate.setSize(product.getSize());
         // pic
         productUpdate.setPicUrl(product.getPicUrl());
+        //change Category
 
         return productRepository.save(productUpdate);
     }
@@ -83,13 +87,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> findProductByPriceBetween(double startPrice, double endPrice) {
-        return productRepository.findProductByPriceBetween(startPrice,endPrice);
+        return productRepository.findProductByPriceBetween(startPrice, endPrice);
     }
 
-//    @Override
-//    public List<Product> findProductByPrice(String price) {
-//        return null;
-//    }
+    @Override
+    public List<Product> findProductByPrice(double price) {
+        return productRepository.findProductProductByPrice(price);
+    }
+
 
     @Override
     public List<Product> findProductBySize(String size) {
@@ -107,23 +112,31 @@ public class ProductServiceImpl implements ProductService {
             }
             if (method.equals("size")) {
 
-                products = productRepository.findProductBySize(Size.valueOf(variable.toUpperCase()));
+                products = productRepository.findProductBySize(
+                        Size.valueOf(variable.toUpperCase()));
             }
-//            if (method.equals("price")) {
-//                double price = Double.parseDouble(variable);
-//                products = productRepository.findProductByPrice(price);
-//            }
         } catch (IllegalArgumentException e) {
             log.warn(e.getMessage());
-
-            if (method.equals("category")) {
-                products = productRepository.findProductByCategoryName(variable);
-            }
-            if (method.equals("name")) {
-                products = productRepository.findProductByProductName(variable);
-            }
         }
+        if (method.equals("category")) {
+            products = productRepository.findProductByCategoryName(variable);
+        }
+        if (method.equals("name")) {
+            products = productRepository.findProductByProductName(variable);
+        }
+
         return products;
+    }
+
+    @Override
+    public List<ProductDto> convertProduct(List<Product> productList) {
+
+        List<ProductDto> productDtos = new ArrayList<>();
+        for (Product product : productList) {
+            ProductDto productDto = mapper.map(product, ProductDto.class);
+            productDtos.add(productDto);
+        }
+        return productDtos;
     }
 
 

@@ -35,7 +35,8 @@ public class ResSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/users/add").permitAll()
                 .antMatchers(HttpMethod.PUT, "/users/update/**").authenticated()
                 .antMatchers("/users/auth").permitAll()
-                .antMatchers("/verifyEmail").permitAll();
+                .antMatchers("/verifyEmail").permitAll()
+                .antMatchers("/products/").permitAll();
 
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 

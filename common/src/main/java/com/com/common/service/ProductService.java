@@ -1,5 +1,6 @@
 package com.com.common.service;
 
+import com.com.common.dto.ProductDto;
 import com.com.common.exception.ProductNotFoundException;
 import com.com.common.model.Product;
 
@@ -25,9 +26,11 @@ public interface ProductService {
 
     List<Product> findProductByPriceBetween(double startPrice,double endPrice);
 
-    List<Product> findProductByPrice(String price);
+    List<Product> findProductByPrice(double price);
 
     List<Product> findProductBySize(String size);
 
     List<Product> filterForProduct(String productName, String method);
+
+    List<ProductDto> convertProduct(List<Product> productList);
 }
