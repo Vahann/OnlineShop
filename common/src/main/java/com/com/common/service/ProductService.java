@@ -1,6 +1,6 @@
 package com.com.common.service;
 
-import com.com.common.dto.ProductDto;
+import com.com.common.dto.response.ProductResponse;
 import com.com.common.exception.ProductNotFoundException;
 import com.com.common.model.Product;
 
@@ -32,5 +32,5 @@ public interface ProductService {
 
     List<Product> filterForProduct(String productName, String method);
 
-    List<ProductDto> convertProduct(List<Product> productList);
+    List<ProductResponse> convertProduct(List<Product> productList);
 }

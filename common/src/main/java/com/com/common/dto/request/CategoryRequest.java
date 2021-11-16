@@ -1,18 +1,17 @@
-package com.com.common.dto;
+package com.com.common.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserAuthResponseDto {
+public class CategoryRequest {
 
-    private String token;
-    private UserDto userDto;
+    private String name;
+
 
 }

@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -38,8 +37,8 @@ public class User {
     private Gender gender;
     private int age;
 
-//    @ManyToMany
-//    private List<Sale> sale; //kommentic hankarc chhanes!!!
-
+    @OneToMany
+    @JoinTable(name = "user_product")
+    private List<Product> products;
 
 }

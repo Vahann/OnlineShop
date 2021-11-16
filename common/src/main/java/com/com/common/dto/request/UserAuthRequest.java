@@ -1,4 +1,4 @@
-package com.com.common.dto;
+package com.com.common.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserAuthDto {
+public class UserAuthRequest {
 
     private String email;
     private String password;

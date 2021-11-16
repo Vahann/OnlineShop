@@ -1,6 +1,6 @@
 package com.com.common.service.impl;
 
-import com.com.common.dto.ProductDto;
+import com.com.common.dto.response.ProductResponse;
 import com.com.common.exception.ProductNotFoundException;
 import com.com.common.model.Product;
 import com.com.common.model.enums.ProductForGender;
@@ -129,11 +129,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> convertProduct(List<Product> productList) {
+    public List<ProductResponse> convertProduct(List<Product> productList) {
 
-        List<ProductDto> productDtos = new ArrayList<>();
+        List<ProductResponse> productDtos = new ArrayList<>();
         for (Product product : productList) {
-            ProductDto productDto = mapper.map(product, ProductDto.class);
+            ProductResponse productDto = mapper.map(product, ProductResponse.class);
             productDtos.add(productDto);
         }
         return productDtos;

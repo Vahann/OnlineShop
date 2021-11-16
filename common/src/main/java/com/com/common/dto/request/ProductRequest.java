@@ -1,4 +1,4 @@
-package com.com.common.dto;
+package com.com.common.dto.request;
 
 import com.com.common.model.Category;
 import com.com.common.model.enums.ProductForGender;
@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductSaveDto {
+public class ProductRequest {
 
 //    @Max(33)
     private String productName;

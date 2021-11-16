@@ -1,10 +1,10 @@
 package com.com.rest.endpoint;
 
 
-import com.com.common.dto.UserAuthDto;
-import com.com.common.dto.UserAuthResponseDto;
-import com.com.common.dto.UserDto;
-import com.com.common.dto.UserSaveDto;
+import com.com.common.dto.request.UserAuthRequest;
+import com.com.common.dto.response.UserAuthResponse;
+import com.com.common.dto.response.UserResponse;
+import com.com.common.dto.request.UserRequest;
 import com.com.common.exception.UserNotFoundException;
 import com.com.common.model.User;
 import com.com.common.service.UserService;
@@ -39,11 +39,11 @@ public class UserEndpoint {
     private final CurrentUserDetailsServiceImpl currentService;
 
     @GetMapping("/")
-    public List<UserDto> getAllUser() throws UserNotFoundException {
+    public List<UserResponse> getAllUser() throws UserNotFoundException {
         List<User> allUser = userService.findAllUsers();
-        List<UserDto> userDtos = new ArrayList<>();
+        List<UserResponse> userDtos = new ArrayList<>();
         for (User user : allUser) {
-            UserDto userDto = mapper.map(user, UserDto.class);
+            UserResponse userDto = mapper.map(user, UserResponse.class);
             userDtos.add(userDto);
         }
         log.info("user {} call method get all users", currentService.currentUser().getEmail());
@@ -52,14 +52,14 @@ public class UserEndpoint {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable("id") int id) throws UserNotFoundException {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable("id") int id) throws UserNotFoundException {
         log.info("User {} searching User by id {}", currentService.currentUser().getEmail(), id);
-        return ResponseEntity.ok(mapper.map(userService.findUserById(id), UserDto.class));
+        return ResponseEntity.ok(mapper.map(userService.findUserById(id), UserResponse.class));
     }
 
 
     @DeleteMapping("/{email}")
-    public ResponseEntity<UserSaveDto> deleteUserByEmail(@PathVariable("email") String email) throws UserNotFoundException {
+    public ResponseEntity<UserRequest> deleteUserByEmail(@PathVariable("email") String email) throws UserNotFoundException {
         if (userService.changeStatusUser(email)) {
             log.info("User {} deleted User by id {}", currentService.currentUser().getEmail(), userService.findUserByEmail(email).get());
 
@@ -70,7 +70,7 @@ public class UserEndpoint {
     }
 
     @PostMapping("/auth")
-    public ResponseEntity auth(@RequestBody @Valid UserAuthDto userAuthDto) throws UserNotFoundException {
+    public ResponseEntity auth(@RequestBody @Valid UserAuthRequest userAuthDto) throws UserNotFoundException {
 
         Optional<User> userByEmail = userService.checkUserByEmail(userAuthDto.getEmail());
         if (userByEmail.isEmpty()) {
@@ -82,16 +82,16 @@ public class UserEndpoint {
         if (passwordEncoder.matches(userAuthDto.getPassword(), user.getPassword())) {
             log.info("user {} successfully logged in", userAuthDto.getEmail());
             return ResponseEntity.ok(
-                    UserAuthResponseDto.builder()
+                    UserAuthResponse.builder()
                             .token(jwtTokenUtil.generateToken(user.getEmail()))
-                            .userDto(mapper.map(user, UserDto.class))
+                            .userResponse(mapper.map(user, UserResponse.class))
                             .build());
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @PostMapping("/add")
-    public ResponseEntity<UserDto> addUser(@RequestBody @Valid UserSaveDto userSaveDto, Locale locale) throws MessagingException {
+    public ResponseEntity<UserResponse> addUser(@RequestBody @Valid UserRequest userSaveDto, Locale locale) throws MessagingException {
 
         if (userService.checkUserByEmail(userSaveDto.getEmail()).isPresent()) {
             log.warn("unsuccessful addition user");
@@ -104,16 +104,16 @@ public class UserEndpoint {
 //                    ", you successfuly registreted"  );
 
         }
-        return ResponseEntity.ok(mapper.map(userSaveDto, UserDto.class));
+        return ResponseEntity.ok(mapper.map(userSaveDto, UserResponse.class));
     }
 
     @PutMapping("/update")
     // except password
-    public ResponseEntity<UserDto> updateUserById(@RequestBody @Valid UserSaveDto userSaveDto) throws UserNotFoundException {
+    public ResponseEntity<UserResponse> updateUserById(@RequestBody @Valid UserRequest userSaveDto) throws UserNotFoundException {
         User user = mapper.map(userService.updateUser(userSaveDto), User.class);
         log.info("the CurrentUser {} successfully updated the data of another user {}",
                 currentService.currentUser().getEmail(), user);
-        return ResponseEntity.ok(mapper.map(user, UserDto.class));
+        return ResponseEntity.ok(mapper.map(user, UserResponse.class));
     }
 
     @GetMapping("/verifyEmail")

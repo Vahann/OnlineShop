@@ -1,8 +1,8 @@
 package com.com.rest.endpoint;
 
 
-import com.com.common.dto.ProductDto;
-import com.com.common.dto.ProductSaveDto;
+import com.com.common.dto.response.ProductResponse;
+import com.com.common.dto.request.ProductRequest;
 import com.com.common.exception.ProductNotFoundException;
 import com.com.common.exception.UserNotFoundException;
 import com.com.common.model.Product;
@@ -44,19 +44,19 @@ public class ProductEndpoint {
     private String uploadDir;
 
     @GetMapping("/")
-    public List<ProductDto> getAllProducts() throws UserNotFoundException {
+    public List<ProductResponse> getAllProducts() throws UserNotFoundException {
         log.info("user {} call method get all product", currentService.currentUser().getEmail());
         return productService.convertProduct(productService.findAllProducts());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") int id) throws ProductNotFoundException, UserNotFoundException {
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable("id") int id) throws ProductNotFoundException, UserNotFoundException {
         log.info("User {} searching product by id {}", currentService.currentUser().getEmail(), id);
-        return ResponseEntity.ok(mapper.map(productService.findProductById(id), ProductDto.class));
+        return ResponseEntity.ok(mapper.map(productService.findProductById(id), ProductResponse.class));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProductSaveDto> deleteProductById(@PathVariable("id") int id)
+    public ResponseEntity<ProductRequest> deleteProductById(@PathVariable("id") int id)
             throws ProductNotFoundException, UserNotFoundException {
         if (productService.nullifyProduct(id)) {
             log.info("User {} deleted product by id {} ",
@@ -68,14 +68,14 @@ public class ProductEndpoint {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ProductDto> addProducts(@RequestBody @Valid ProductSaveDto productSaveDto) throws UserNotFoundException {
-        if (productSaveDto == null) {
+    public ResponseEntity<ProductResponse> addProducts(@RequestBody @Valid ProductRequest productRequest) throws UserNotFoundException {
+        if (productRequest == null) {
             log.warn("user {} tried to add a product is null", currentService.currentUser().getEmail());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } else {
-            Product product = productService.addProduct(mapper.map(productSaveDto, Product.class));
-            log.info("user {} to add a product{} ", currentService.currentUser().getEmail(), productSaveDto);
-            return ResponseEntity.ok(mapper.map(product, ProductDto.class));
+            Product product = productService.addProduct(mapper.map(productRequest, Product.class));
+            log.info("user {} to add a product{} ", currentService.currentUser().getEmail(), productRequest);
+            return ResponseEntity.ok(mapper.map(product, ProductResponse.class));
         }
     }
 
@@ -102,24 +102,24 @@ public class ProductEndpoint {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ProductDto> updateProductById(@PathVariable("id") int id,
-                                                        @RequestBody ProductSaveDto productSaveDto,
-                                                        @AuthenticationPrincipal CurrentUser currentUser) throws ProductNotFoundException {
-        Product product = productService.updateProduct(id, mapper.map(productSaveDto, Product.class));
-        log.info("user {} to update a product{} ", currentUser.getUser().getEmail(), productSaveDto);
-        return ResponseEntity.ok(mapper.map(product, ProductDto.class));
+    public ResponseEntity<ProductResponse> updateProductById(@PathVariable("id") int id,
+                                                             @RequestBody ProductRequest productRequest,
+                                                             @AuthenticationPrincipal CurrentUser currentUser) throws ProductNotFoundException {
+        Product product = productService.updateProduct(id, mapper.map(productRequest, Product.class));
+        log.info("user {} to update a product{} ", currentUser.getUser().getEmail(), productRequest);
+        return ResponseEntity.ok(mapper.map(product, ProductResponse.class));
     }
 
     @GetMapping("/productFilter/{variable}/method/{method}")
-    public List<ProductDto> productFilter(@PathVariable("variable") String variable,
-                                          @PathVariable("method") String method) {
+    public List<ProductResponse> productFilter(@PathVariable("variable") String variable,
+                                               @PathVariable("method") String method) {
 
         return productService.convertProduct(productService.filterForProduct(variable, method));
     }
 
     @GetMapping("/price/{startPrice}/{endPrice}")
-    public List<ProductDto> searchProductByPrice(@PathVariable("startPrice") double startPrice,
-                                                 @PathVariable("endPrice") double endPrice) {
+    public List<ProductResponse> searchProductByPrice(@PathVariable("startPrice") double startPrice,
+                                                      @PathVariable("endPrice") double endPrice) {
 
         return productService.convertProduct(productService.findProductByPriceBetween(startPrice, endPrice));
     }

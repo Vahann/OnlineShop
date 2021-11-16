@@ -1,7 +1,7 @@
-package com.com.common.dto;
+package com.com.common.dto.response;
 
+import com.com.common.model.Product;
 import com.com.common.model.enums.Gender;
-import com.com.common.model.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,32 +9,21 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserSaveDto {
-    @Enumerated(EnumType.STRING)
-    private Role role;
-//    @NotNull
-//    @NotEmpty(message = "Name is required")
-    private String name;
-//    @Max(33)
-    private String surname;
-//    @Email
-//    @NotNull
-    private String email;
-//    @Size(max = 11, min = 6)
-    private String password;
+public class UserResponse {
 
-//    @NotEmpty(message = "phone number must start with +")
-    private String phoneNumber;
-    @Min(3)
+    private int id;
+    private String name;
+    private String surname;
+    private String email;
     private int age;
     private boolean isActive;
-
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    private List<Product> products;
 }

@@ -1,6 +1,6 @@
 package com.com.common.service.impl;
 
-import com.com.common.dto.UserSaveDto;
+import com.com.common.dto.request.UserRequest;
 import com.com.common.exception.UserNotFoundException;
 import com.com.common.model.User;
 import com.com.common.repository.UserRepository;
@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(UserSaveDto userSaveDto) throws UserNotFoundException {
+    public User updateUser(UserRequest userSaveDto) throws UserNotFoundException {
         Optional<User> userByEmail = findUserByEmail(userSaveDto.getEmail());
         if (userByEmail.isEmpty()) {
             throw new UserNotFoundException();

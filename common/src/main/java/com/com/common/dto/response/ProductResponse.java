@@ -1,4 +1,4 @@
-package com.com.common.dto;
+package com.com.common.dto.response;
 
 import com.com.common.model.Category;
 import com.com.common.model.enums.ProductForGender;
@@ -15,7 +15,7 @@ import javax.persistence.Enumerated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductDto {
+public class ProductResponse {
 
     private int id;
     private String productName;
