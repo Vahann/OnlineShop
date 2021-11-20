@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Page</title>
+    <link href="/css/style.css" rel="stylesheet"/>
+</head>
+<body>
+<!--<header th:insert="fragments/general.html :: header"></header>-->
+
+Users:
+<table id="users" border="1">
+    <thead>
+    <tr>
+        <td>User Id</td>
+        <td>User Name</td>
+        <td>User Surname</td>
+        <td>Email</td>
+        <td>Active</td>
+        <td>Gender</td>
+        <td>Age</td>
+        <td>Action</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user: ${users}">
+
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.surname}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.isActiveProfile()}"></td>
+        <td th:text="${user.getGender()}"></td>
+        <td th:text="${user.age}"></td>
+        <td><a th:href="@{/user/delete(id=${user.id})}">delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
