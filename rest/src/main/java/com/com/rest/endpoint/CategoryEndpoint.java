@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -30,8 +31,19 @@ public class CategoryEndpoint {
 
     @GetMapping("/")
     public List<CategoryResponse> searchAllCategory() throws UserNotFoundException {
-        log.info("user {} call method get all category", currentService.currentUser().getEmail());
-        return categoryService.convertCategory(categoryService.findAll());
+
+//        log.info("user {} call method get all category", currentService.currentUser().getEmail());
+//        return categoryService.convertCategory(categoryService.findAllCategory());
+
+        // convertCategory need change
+
+        List<Category> categoryList=categoryService.findAllCategory();
+        List<CategoryResponse> categoryResponseList=new ArrayList<>();
+        for (Category category:categoryList){
+            CategoryResponse categoryResponse=mapper.map(category,CategoryResponse.class);
+            categoryResponseList.add(categoryResponse);
+        }
+        return categoryResponseList;
     }
 
     @GetMapping("/{categoryName}")

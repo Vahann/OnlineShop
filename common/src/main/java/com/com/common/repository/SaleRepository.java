@@ -13,6 +13,7 @@ public interface SaleRepository extends JpaRepository<Sale, Integer> {
     Optional<List<Sale>> findSaleByProductId(int id);
 
     Optional<List<Sale>> findSaleByUserEmail(String email);
+//    List<Sale> findSaleByUserEmail(String email);
 
     List<Sale> findSaleByStatus(Status status);
 }

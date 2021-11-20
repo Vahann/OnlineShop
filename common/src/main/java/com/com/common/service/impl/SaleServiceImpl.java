@@ -3,7 +3,6 @@ package com.com.common.service.impl;
 import com.com.common.dto.response.SaleResponse;
 import com.com.common.exception.ProductNotFoundException;
 import com.com.common.exception.SaleNotCompletedException;
-import com.com.common.exception.UserNotFoundException;
 import com.com.common.model.Product;
 import com.com.common.model.Sale;
 import com.com.common.model.User;
@@ -16,10 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -40,27 +36,29 @@ public class SaleServiceImpl implements SaleService {
         return saleRepository.findSaleByProductId(id);
     }
 
-    @Override
+        @Override
     public Optional<List<Sale>> findSalesByUserEmail(String email) {
         return saleRepository.findSaleByUserEmail(email);
     }
 
     @Override
-    public Sale addSale(Sale sale, int productId,int productCount, User user) throws ProductNotFoundException, SaleNotCompletedException {
-
+    public Sale addSale(int productId, int requestProductCount, User user) throws ProductNotFoundException, SaleNotCompletedException {
+        Sale sale = new Sale();
         Product productFromDB = productService.findProductById(productId);
-        if (productFromDB.getCount() > productCount && user.isActiveProfile()) {
+        if (productFromDB.getCount() > requestProductCount && user.isActiveProfile()) {
             sale.setProduct(productFromDB);
             sale.setUser(user);
-            sale.setProductCount(productCount);
+            sale.setQuantity(requestProductCount);
+            /// hard code
+            sale.setStatus(Status.IN_PROCESS);
             sale.setSaleDate(new Date());
 
-            productFromDB.setCount(productFromDB.getCount()-productCount);
+            productFromDB.setCount(productFromDB.getCount() - requestProductCount);
             productService.addProduct(productFromDB);
-        }else {
-         throw new SaleNotCompletedException();
-        }
 
+        } else {
+            throw new SaleNotCompletedException();
+        }
 
         return saleRepository.save(sale);
     }
@@ -78,11 +76,13 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public List<SaleResponse> convertSale(List<Sale> saleList) {
-        List<SaleResponse> saleDtos = new ArrayList<>();
+
+        List<SaleResponse> saleResponses = new ArrayList<>();
         for (Sale sale : saleList) {
             SaleResponse saleDto = mapper.map(sale, SaleResponse.class);
-            saleDtos.add(saleDto);
+            saleResponses.add(saleDto);
         }
-        return saleDtos;
+        return saleResponses;
     }
+
 }

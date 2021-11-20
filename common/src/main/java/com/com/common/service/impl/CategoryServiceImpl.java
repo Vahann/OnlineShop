@@ -33,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> findAll() {
+    public List<Category> findAllCategory() {
         return categoryRepository.findAll();
     }
 
@@ -57,9 +57,6 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryDtos;
     }
 
-//    @Override
-//    public List<Category> findProductByCategoryName(String categoryName) {
-//        return categoryRepository.findProductByCategoryName(categoryName);
-//    }
+
 
 }

@@ -26,9 +26,11 @@ public class Sale {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(name = "product_count")
+    private int quantity;
+
     @ManyToOne
     private Product product;
-    private int productCount;
 
     @ManyToOne
     private User user;
