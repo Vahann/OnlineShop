@@ -16,7 +16,7 @@ public class MainController {
 
     private final UserRepository userRepository;
 
-    @GetMapping("/1")
+    @GetMapping("/admin")
     public String admin() {
         return "admin";
     }
@@ -29,13 +29,6 @@ public class MainController {
     @GetMapping("/registration")
     public String registration() {
         return "registration";
-    }
-
-    @GetMapping("/seller")
-    public String userPage(ModelMap modelMap) {
-        List<User> users = userRepository.findAll();
-        modelMap.addAttribute("users", users);
-        return "seller";
     }
 
 

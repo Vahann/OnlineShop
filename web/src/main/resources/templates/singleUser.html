@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Page</title>
-    <link href="/css/style.css" rel="stylesheet"/>
+    <title>Title</title>
 </head>
 <body>
-<!--<header th:insert="fragments/general.html :: header"></header>-->
-
+<body>
 <a  href="admin">Go To Admin Page   </a>
 
 <form action="sellerFind" method="Get">
     <input type="text" name="email" placeholder="Please input UserEmail"/><br>
-<!--    <a th:href="@{/seller/delete(email=${user.email})}">delete</a>-->
     <input type="submit" value="find">
 </form>
 <br> Users:   </br>
@@ -44,5 +41,6 @@
     </tr>
     </tbody>
 </table>
+</body>
 </body>
 </html>
