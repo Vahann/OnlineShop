@@ -18,7 +18,7 @@ public interface SaleService {
 
     Optional<List<Sale>> findSalesByUserEmail(String email);
 
-    Sale addSale(Sale sale, int productId,int count, User user) throws ProductNotFoundException, UserNotFoundException, SaleNotCompletedException;
+    Sale addSale(int productId,int count, User user) throws ProductNotFoundException, UserNotFoundException, SaleNotCompletedException;
 
     List<Sale> searchSaleByStatus(String status);
 

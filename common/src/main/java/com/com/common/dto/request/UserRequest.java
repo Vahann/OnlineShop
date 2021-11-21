@@ -31,7 +31,7 @@ public class UserRequest {
 
 //    @NotEmpty(message = "phone number must start with +")
     private String phoneNumber;
-    @Min(3)
+//    @Min(3)
     private int age;
     private boolean isActive;
 

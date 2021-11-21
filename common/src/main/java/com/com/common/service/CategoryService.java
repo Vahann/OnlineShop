@@ -13,7 +13,7 @@ public interface CategoryService {
 
     Category findCategoryByName(String name) throws CategoryNotFoundException;
 
-    List<Category> findAll();
+    List<Category> findAllCategory();
 
     Optional<Category> checkCategoryByName(String name);
 

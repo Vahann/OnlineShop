@@ -51,10 +51,10 @@ public class SaleEndpoint {
     public ResponseEntity<List<SaleResponse>> searchSaleByUserEmail(@PathVariable("email") String email) throws UserNotFoundException {
         Optional<List<Sale>> saleByUserEmail = saleService.findSalesByUserEmail(email);
         if (saleByUserEmail.isEmpty()) {
-            log.info("user {} tried to find an order By User Email ", currentService.currentUser().getEmail());
+            log.info("user {} tried to find an order By User Email{} ", currentService.currentUser().getEmail(),email);
             return ResponseEntity.notFound().build();
         }
-        log.info("user {} looking for an order by User Email {}", currentService.currentUser().getEmail(), saleByUserEmail.get());
+        log.info("user {} looking for an order by User Email {}", currentService.currentUser().getEmail(), email);
         return ResponseEntity.ok(saleService.convertSale(saleByUserEmail.get()));
     }
 
@@ -70,16 +70,17 @@ public class SaleEndpoint {
 
     @PostMapping("/add/{productId}/{productCount}") ///{userId}
     public ResponseEntity<SaleResponse> addSale(@PathVariable("productId") int productId,
-                                                @PathVariable("productCount") int productCount,
-                                                @RequestBody SaleRequest saleRequest) throws ProductNotFoundException, UserNotFoundException, SaleNotCompletedException {
-        return ResponseEntity.ok(mapper.map(saleService.addSale(mapper.map(saleRequest, Sale.class), productId,productCount, currentService.currentUser()), SaleResponse.class));
+                                                @PathVariable("productCount") int productCount
+                                               /* @RequestBody SaleRequest saleRequest*/) throws ProductNotFoundException, UserNotFoundException, SaleNotCompletedException {
+        return ResponseEntity.ok(mapper.map(saleService.addSale(productId,productCount, currentService.currentUser()),SaleResponse.class));
     }
 
-    @GetMapping("/{saleStatus}")
+    @GetMapping("/status/{saleStatus}")
     public ResponseEntity<List<SaleResponse>> searchSaleByStatus(@PathVariable("saleStatus") String saleStatus) {
 
         return ResponseEntity.ok(saleService.convertSale(saleService.searchSaleByStatus(saleStatus)));
 
     }
+
 
 }

@@ -19,12 +19,13 @@ import java.util.Date;
 public class SaleResponse {
 
     private int id;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private Product product;
-    private int productCount;
+    private int quantity;
 
+    private Product product;
 
     private User user;
 
