@@ -1,10 +1,10 @@
 package com.com.common.service;
 
+import com.com.common.dto.response.ProductResponse;
 import com.com.common.exception.ProductNotFoundException;
 import com.com.common.model.Product;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductService {
     List<Product> findAllProducts();
@@ -17,20 +17,20 @@ public interface ProductService {
 
     Product updateProduct(int id, Product product) throws ProductNotFoundException;
 
-
-//Ok 
- /**
-    List<Product> findAllProducts();
-
-    Optional<Product> findProductById(int id);
-
-    void addProduct(Product product);    // MultipartFile multipartFile
-
-    boolean nullifyProduct(int id);
-
-    Product updateProduct(int id, Product product) throws ProductNotFoundException;
-    */
-//   OK 
+    List<Product> findProductByCategoryName(String categoryName);
 
 
+    List<Product> findProductByProductName(String productName);
+
+    List<Product> getProductByProductForGender(String gender);
+
+    List<Product> findProductByPriceBetween(double startPrice,double endPrice);
+
+    List<Product> findProductByPrice(double price);
+
+    List<Product> findProductBySize(String size);
+
+    List<Product> filterForProduct(String productName, String method);
+
+    List<ProductResponse> convertProduct(List<Product> productList);
 }

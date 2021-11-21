@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Page</title>
+    <link href="/css/style.css" rel="stylesheet"/>
+</head>
+<body>
+<!--<header th:insert="fragments/general.html :: header"></header>-->
+
+<a  href="admin">Go To Admin Page   </a>
+<br> Orders:   </br>
+<table id="products" border="1">
+    <thead>
+    <tr>
+        <td>Order Id</td>
+        <td>Order Status</td>
+        <td>Product</td>
+        <td>Product Count</td>
+        <td>Seller</td>
+        <td>Order Date</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="sale: ${sales}">
+
+        <td th:text="${sale.id}"></td>
+        <td th:text="${sale.status}"></td>
+        <td th:text="${sale.getProduct()}"></td>
+        <td th:text="${sale.quantity}"></td>
+        <td th:text="${sale.user}"></td>
+        <td th:text="${sale.saleDate}"></td>
+        <td><a th:href="@{/orders/delete(id=${sale.id})}">delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -31,13 +31,14 @@ public class User {
     private String password;
     private String phoneNumber;
     private boolean activeProfile;
+    private String token;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private int age;
 
-//    @ManyToMany
-//    private List<Sale> sale; //kommentic hankarc chhanes!!!
-
+    @OneToMany
+    @JoinTable(name = "user_product")
+    private List<Product> products;
 
 }

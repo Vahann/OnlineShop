@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<body>
+<a  href="admin">Go To Admin Page   </a>
+
+<form action="sellerFind" method="Get">
+    <input type="text" name="email" placeholder="Please input UserEmail"/><br>
+    <input type="submit" value="find">
+</form>
+<br> Users:   </br>
+<table id="users" border="1">
+    <thead>
+    <tr>
+        <td>User Id</td>
+        <td>User Name</td>
+        <td>User Surname</td>
+        <td>Email</td>
+        <td>Active</td>
+        <td>Gender</td>
+        <td>Age</td>
+        <td>Action</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user: ${users}">
+
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.surname}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.isActiveProfile()}"></td>
+        <td th:text="${user.getGender()}"></td>
+        <td th:text="${user.age}"></td>
+        <td><a th:href="@{/seller/delete(email=${user.email})}">delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</body>
+</html>

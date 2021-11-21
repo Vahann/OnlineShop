@@ -1,6 +1,7 @@
 package com.com.common.model;
 
 
+import com.com.common.model.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,12 @@ public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+//in progress
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @Column(name = "product_count")
+    private int quantity;
 
     @ManyToOne
     private Product product;

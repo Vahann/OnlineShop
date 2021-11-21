@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Categories Page</title>
+    <link href="/css/style.css" rel="stylesheet"/>
+</head>
+<body>
+<!--<header th:insert="fragments/general.html :: header"></header>-->
+
+<a  href="admin">Go To Admin Page   </a>
+<br> Categories:   </br>
+<table id="products" border="1">
+    <thead>
+    <tr>
+        <td>Category Name</td>
+        <td>Category Id</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="category: ${categories}">
+
+        <td th:text="${category.id}"></td>
+        <td th:text="${category.name}"></td>
+
+        <td><a th:href="@{/product/delete(id=${category.id})}">delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
