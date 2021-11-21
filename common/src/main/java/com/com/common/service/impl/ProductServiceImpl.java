@@ -1,25 +1,28 @@
 package com.com.common.service.impl;
 
+import com.com.common.dto.response.ProductResponse;
+import com.com.common.exception.ProductNotFoundException;
 import com.com.common.model.Product;
-
-import com.com.common.model.Sale;
+import com.com.common.model.enums.ProductForGender;
+import com.com.common.model.enums.Size;
 import com.com.common.repository.ProductRepository;
-
 import com.com.common.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-
+    private final ModelMapper mapper;
 
     @Override
     public List<Product> findAllProducts() {
@@ -27,65 +30,114 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> findProductById(int id) {
-
-        return productRepository.findById(id);
-    }
-
-    @Override
-    public void addProduct(Product product, MultipartFile multipartFile) {  //MultipartFile multipartFile
-
-        productRepository.save(product);
-    }
-
-//    @Override
-//    public void updateProduct(Product product) {
-//
-//    }
-
-
-//    @Override
-//    public void addProduct(Product product, MultipartFile multipartFile) {
-
-//        if (!multipartFile.isEmpty()) {
-//            String picUrl = System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
-//            try {
-//                multipartFile.transferTo(new File(uploadDir + File.separator + picUrl));
-//            } catch (IOException e) {
-//                log.error("Exception while uploading file {} ", picUrl);
-//
-//            }
-//            product.setPicUrl(picUrl);
-//        }
-
-//        List<Hashtag> hashtags = new ArrayList<>();
-//        for (String s : hashtagList) {
-//            var byName = hashtagService.findByName(s);
-//            hashtags.add(byName);
-//        }
-//        book.setHashtags(hashtags);
-
-//        product.setProductAddDate(new Date());
-    //      productRepository.save(product);
-    // }
-//}
-
-    @Override
-    public boolean nullifyProduct(int id) {    //deleteProduct
+    public Product findProductById(int id) throws ProductNotFoundException {
         Optional<Product> productById = productRepository.findById(id);
-        if (productById.isPresent()) {
-            Product product = productById.get();
-            product.setCount(0);
-            productRepository.save(product);
-            return true;
+        if (productById.isEmpty()) {
+            throw new ProductNotFoundException("Product does not exist");
         }
-        return false;
+        return productById.get();
     }
 
-//    @Override
-//    public Optional<Product> findSaleByProductId(int id) {
-//
-//
-//        return Optional.empty();
-//    }
+    @Override
+    public boolean nullifyProduct(int id) throws ProductNotFoundException {
+        Product productById = findProductById(id);
+        productById.setCount(0);
+        productRepository.save(productById);
+        return true;
+    }
+
+    @Override
+    public Product addProduct(Product product) {
+        return productRepository.save(product);
+    }
+
+    @Override
+    public Product updateProduct(int id, Product product) throws ProductNotFoundException {
+
+        Product productUpdate = findProductById(id);
+
+        productUpdate.setProductName(product.getProductName());
+        productUpdate.setDescription(product.getDescription());
+        productUpdate.setPrice(product.getPrice());
+        productUpdate.setCount(product.getCount());
+        productUpdate.setProductForGender(product.getProductForGender());
+        productUpdate.setSize(product.getSize());
+        // pic
+        productUpdate.setPicUrl(product.getPicUrl());
+        //change Category
+
+        return productRepository.save(productUpdate);
+    }
+
+    @Override
+    public List<Product> findProductByCategoryName(String categoryName) {
+        return productRepository.findProductByCategoryName(categoryName);
+    }
+
+    @Override
+    public List<Product> findProductByProductName(String productName) {
+        return productRepository.findProductByProductName(productName);
+    }
+
+    @Override
+    public List<Product> getProductByProductForGender(String gender) {
+
+        return productRepository.findProductByProductForGender(ProductForGender.valueOf(gender));
+    }
+
+    @Override
+    public List<Product> findProductByPriceBetween(double startPrice, double endPrice) {
+        return productRepository.findProductByPriceBetween(startPrice, endPrice);
+    }
+
+    @Override
+    public List<Product> findProductByPrice(double price) {
+        return productRepository.findProductProductByPrice(price);
+    }
+
+
+    @Override
+    public List<Product> findProductBySize(String size) {
+        return productRepository.findProductBySize(Size.valueOf(size));
+    }
+
+    @Override
+    public List<Product> filterForProduct(String variable, String method) {
+
+        List<Product> products = new ArrayList<>();
+        try {
+            if (method.equals("gender")) {
+                products = productRepository.findProductByProductForGender(
+                        ProductForGender.valueOf(variable.toUpperCase()));
+            }
+            if (method.equals("size")) {
+
+                products = productRepository.findProductBySize(
+                        Size.valueOf(variable.toUpperCase()));
+            }
+        } catch (IllegalArgumentException e) {
+            log.warn(e.getMessage());
+        }
+        if (method.equals("category")) {
+            products = productRepository.findProductByCategoryName(variable);
+        }
+        if (method.equals("name")) {
+            products = productRepository.findProductByProductName(variable);
+        }
+
+        return products;
+    }
+
+    @Override
+    public List<ProductResponse> convertProduct(List<Product> productList) {
+
+        List<ProductResponse> productDtos = new ArrayList<>();
+        for (Product product : productList) {
+            ProductResponse productDto = mapper.map(product, ProductResponse.class);
+            productDtos.add(productDto);
+        }
+        return productDtos;
+    }
+
+
 }
